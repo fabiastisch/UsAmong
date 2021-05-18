@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MLAPI;
+using MLAPI.Spawning;
 using MLAPI.Transports.UNET;
 using TMPro;
 using UnityEngine;
@@ -70,6 +71,8 @@ public class MainMenu : MonoBehaviour {
     
     public void Host() {
         UpdateSettings();
+        NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
+
         NetworkManager.Singleton.StartHost();
         //connect.SetActive(false);
         //disconnect.SetActive(true);
@@ -124,5 +127,21 @@ public class MainMenu : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+    }
+    
+    /**
+     * Happen on server
+     */
+    private void ApprovalCheck(byte[] connectionData, ulong clientId, MLAPI.NetworkManager.ConnectionApprovedDelegate callback) {
+        Debug.Log("Approving a connection");
+        // logic
+        bool approve = true;
+        bool createPlayerObject = false;
+        // The prefab hash. Use null to use the default player prefab
+        // If using this hash, replace "MyPrefabHashGenerator" with the name of a prefab added to the NetworkPrefabs field of your NetworkManager object in the scene
+        ulong? prefabHash = NetworkSpawnManager.GetPrefabHashFromGenerator("MyPrefabHashGenerator");
+
+        //If approve is true, the connection gets added. If it's false. The client gets disconnected
+        callback(createPlayerObject, null, approve, null, null);
     }
 }

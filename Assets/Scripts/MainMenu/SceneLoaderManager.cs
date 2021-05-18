@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public static class SceneLoaderManager {
     public static void LoadLobby() {
-        SceneManager.LoadSceneAsync("Lobby", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("Lobby", LoadSceneMode.Single);
     }
 
     public static void LoadMainMenu() {
