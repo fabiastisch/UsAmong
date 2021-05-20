@@ -18,11 +18,11 @@ public class MyNetworkManager : MonoBehaviour {
     }
 
     private void OnClientConnected(ulong client_ID) {
-        Debug.Log("Client Connected");
+        Debug.Log("Client Connected: " + client_ID);
     }
 
     private void OnClientDisconnect(ulong client_ID) {
-        Debug.Log("Client Disconnected");
+        Debug.Log("Client Disconnected: " + client_ID);
         if (NetworkManager.Singleton.IsHost) {
             return;
         }

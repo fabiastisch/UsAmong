@@ -13,9 +13,9 @@ public class MainMenu : MonoBehaviour {
     public GameObject startMenu;
     public GameObject playMenu;
     public GameObject optionMenu;
-    
+
     private String username;
-    
+
     public TMP_InputField ipAddressInput;
     public TMP_InputField usernameInput;
 
@@ -57,18 +57,19 @@ public class MainMenu : MonoBehaviour {
             o.SetActive(o == gameObject);
         }
     }
-    
+
     public void QuitGame() {
         Application.Quit();
     }
-    
+
     public void PlayGame() {
         // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
         SceneLoaderManager.LoadLobby();
+        SceneLoaderManager.LoadEscMenu();
     }
-    
+
     public void Host() {
         UpdateSettings();
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
@@ -78,16 +79,16 @@ public class MainMenu : MonoBehaviour {
         //disconnect.SetActive(true);
         PlayGame();
     }
-    
+
     public void Join() {
         // NetworkSceneManager.SwitchScene(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name);
         UpdateSettings();
+        PlayGame();
         NetworkManager.Singleton.StartClient();
         //connect.SetActive(false);
         //disconnect.SetActive(true); 
-        PlayGame();
     }
-    
+
     public void Server() {
         UpdateSettings();
         NetworkManager.Singleton.StartServer();
@@ -108,11 +109,12 @@ public class MainMenu : MonoBehaviour {
 
         SceneManager.LoadScene("Scenes/MainMenu");
     }
-    
+
     private void UpdateSettings() {
         username = usernameInput.text;
         // UpdateAdress();
     }
+
     private void UpdateAdress() {
         UNetTransport transport = NetworkManager.Singleton.GetComponent<UNetTransport>();
         Debug.Log(ipAddressInput);
@@ -128,7 +130,7 @@ public class MainMenu : MonoBehaviour {
     // Update is called once per frame
     void Update() {
     }
-    
+
     /**
      * Happen on server
      */
@@ -139,9 +141,12 @@ public class MainMenu : MonoBehaviour {
         bool createPlayerObject = false;
         // The prefab hash. Use null to use the default player prefab
         // If using this hash, replace "MyPrefabHashGenerator" with the name of a prefab added to the NetworkPrefabs field of your NetworkManager object in the scene
-        ulong? prefabHash = NetworkSpawnManager.GetPrefabHashFromGenerator("MyPrefabHashGenerator");
+        ulong? prefabHash = NetworkSpawnManager.GetPrefabHashFromGenerator("Player");
 
         //If approve is true, the connection gets added. If it's false. The client gets disconnected
-        callback(createPlayerObject, null, approve, null, null);
+        Vector3? positionToSpawnWith = Vector3.zero;
+        Quaternion? rotationToSpawnWith = Quaternion.identity;
+
+        callback(createPlayerObject, prefabHash, approve, positionToSpawnWith, rotationToSpawnWith);
     }
 }
