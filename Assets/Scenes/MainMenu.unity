@@ -2265,6 +2265,9 @@ MonoBehaviour:
     - Prefab: {fileID: 8324204290173665908, guid: 8273cbaa16610354d94860bfe7ed2b23,
         type: 3}
       PlayerPrefab: 0
+    - Prefab: {fileID: 8985095211633594649, guid: 6c21678889121b040a43534890cdd659,
+        type: 3}
+      PlayerPrefab: 1
     PlayerPrefabHash:
       id: 0
     CreatePlayerPrefab: 0
@@ -2292,7 +2295,9 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: NullableBoolSerializable, ns: MLAPI.Configuration, asm: Unity.Multiplayer.MLAPI.Runtime}
+      data:
+        Value: 1897319656204293034
 --- !u!4 &1256578091
 Transform:
   m_ObjectHideFlags: 0

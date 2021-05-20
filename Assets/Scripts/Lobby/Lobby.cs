@@ -8,8 +8,8 @@ namespace Lobby {
         // Start is called before the first frame update
         void Start() {
             if (NetUtils.IsServer()) {
-                Instantiate(lobbyManager, Vector3.zero, Quaternion.identity);
-                lobbyManager.GetComponent<NetworkObject>().Spawn();
+                GameObject lobbyManagerInstance = Instantiate(lobbyManager, Vector3.zero, Quaternion.identity);
+                lobbyManagerInstance.GetComponent<NetworkObject>().Spawn();
             }
         }
 

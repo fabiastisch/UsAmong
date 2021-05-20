@@ -18,20 +18,23 @@ public class LobbyManager : NetworkBehaviour {
             return;
         }
 
-        /*if (IsClient) {
-            Debug.Log("SpawnMe ServerRPS -. ");
-            SpawnMeServerRpc(NetworkManager.Singleton.LocalClientId);
-        }else {
+        if (NetUtils.IsServer()) {
+            Debug.Log("Server Spawn");
             Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
             player = Instantiate(playerObject, random, Quaternion.identity);
-        }*/
+        }
+        else {
+            Debug.Log("Invoke RPC");
+
+            SpawnMeServerRpc(NetworkManager.Singleton.LocalClientId);
+        }
     }
 
     // Update is called once per frame
     void Update() {
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void SpawnMeServerRpc(ulong clientId) {
         Debug.Log("Server RPC");
         Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
