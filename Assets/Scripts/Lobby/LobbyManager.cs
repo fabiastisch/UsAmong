@@ -20,8 +20,7 @@ public class LobbyManager : NetworkBehaviour {
 
         if (NetUtils.IsServer()) {
             Debug.Log("Server Spawn");
-            Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
-            player = Instantiate(playerObject, random, Quaternion.identity);
+            SpawnPlayer(NetworkManager.Singleton.LocalClientId);
         }
         else {
             Debug.Log("Invoke RPC");
@@ -36,14 +35,18 @@ public class LobbyManager : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void SpawnMeServerRpc(ulong clientId) {
-        Debug.Log("Server RPC");
-        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
-        player = Instantiate(playerObject, random, Quaternion.identity);
-        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, null, true);
+        Debug.Log("Server RPC"); 
+        SpawnPlayer(clientId);
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void DestroyMeServerRpc() {
         player.GetComponent<NetworkObject>().Despawn(true);
+    }
+
+    private void SpawnPlayer(ulong clientId) {
+        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        player = Instantiate(playerObject, random, Quaternion.identity);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, null, true);
     }
 }
