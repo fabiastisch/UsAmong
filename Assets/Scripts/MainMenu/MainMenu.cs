@@ -83,8 +83,8 @@ public class MainMenu : MonoBehaviour {
     public void Join() {
         // NetworkSceneManager.SwitchScene(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name);
         UpdateSettings();
-        PlayGame();
         NetworkManager.Singleton.StartClient();
+        PlayGame();
         //connect.SetActive(false);
         //disconnect.SetActive(true); 
     }
@@ -111,6 +111,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     private void UpdateSettings() {
+        LocalGameManager.Singleton.playerName = usernameInput.text;
         username = usernameInput.text;
         // UpdateAdress();
     }

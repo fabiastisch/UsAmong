@@ -1,10 +1,9 @@
-﻿using System;
-using MLAPI;
+﻿using MLAPI;
 using UnityEngine;
-using Utils;
 using Debug = System.Diagnostics.Debug;
 
 namespace Player {
+    [RequireComponent(typeof(NetworkObject))]
     public class PlayerCamera : NetworkBehaviour {
         public float initCamDistance = 30f;
         public bool isEnabled = true;

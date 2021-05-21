@@ -1,4 +1,5 @@
 ﻿using MLAPI;
+using MLAPI.NetworkVariable;
 using UnityEngine;
 
 namespace Utils {
@@ -18,5 +19,13 @@ namespace Utils {
         public static bool IsClient() {
             return NetworkManager.Singleton && NetworkManager.Singleton.IsClient;
         }
+
+        public static readonly NetworkVariableSettings Everyone = new NetworkVariableSettings() {
+            ReadPermission = NetworkVariablePermission.Everyone,
+            WritePermission = NetworkVariablePermission.Everyone,
+            SendTickrate = 10
+        };
+
+        public static ulong LocalClientId => NetworkManager.Singleton.LocalClientId;
     }
 }

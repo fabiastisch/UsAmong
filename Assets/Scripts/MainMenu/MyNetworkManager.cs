@@ -12,7 +12,6 @@ public class MyNetworkManager : MonoBehaviour {
         NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
     }
 
-
     private void OnServerStarted() {
         Debug.Log("Server Started");
     }
