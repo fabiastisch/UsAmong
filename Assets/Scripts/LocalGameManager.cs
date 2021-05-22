@@ -33,7 +33,6 @@ public class LocalGameManager : MonoBehaviour {
 
     private void OnPlayerSpawned(ulong clientId) {
         if (!NetworkManager.Singleton.LocalClientId.Equals(clientId)) {
-            Debug.LogWarning("Not Same client: "+ clientId);
             return;
         }
         GameObject o = NetworkSpawnManager.GetLocalPlayerObject().gameObject;

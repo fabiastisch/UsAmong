@@ -734,7 +734,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1719480802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,6 +926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyManager: {fileID: 8324204290173665908, guid: 8273cbaa16610354d94860bfe7ed2b23,
     type: 3}
+  canvas: {fileID: 1719480801}
 --- !u!1001 &3136855279525942824
 PrefabInstance:
   m_ObjectHideFlags: 0

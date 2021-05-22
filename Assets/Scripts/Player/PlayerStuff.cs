@@ -27,9 +27,5 @@ namespace Player {
             playerNameTMP.text = newvalue;
         }
 
-        void Start() {
-            // playerNameTMP.text = PlayerName.Value;
-        }
-
     }
 }

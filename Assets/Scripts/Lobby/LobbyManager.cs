@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using MLAPI;
 using MLAPI.Messaging;
-using MLAPI.NetworkVariable;
-using MLAPI.NetworkVariable.Collections;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
@@ -54,6 +50,13 @@ public class LobbyManager : NetworkBehaviour {
         }
     }
 
+    private void SpawnPlayer(ulong clientId) {
+        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        player = Instantiate(playerObject, random, Quaternion.identity);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, null, true);
+        SpawnedPlayerClientRpc(clientId);
+    }
+
     [ServerRpc(RequireOwnership = false)]
     private void SpawnMeServerRpc(ulong clientId) {
         Debug.Log("Server RPC"); 
@@ -63,13 +66,6 @@ public class LobbyManager : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void DestroyMeServerRpc() {
         player.GetComponent<NetworkObject>().Despawn(true);
-    }
-
-    private void SpawnPlayer(ulong clientId) {
-        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
-        player = Instantiate(playerObject, random, Quaternion.identity);
-        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, null, true);
-        SpawnedPlayerClientRpc(clientId);
     }
 
     [ClientRpc]

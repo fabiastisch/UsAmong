@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using MLAPI;
 using MLAPI.Spawning;
@@ -7,7 +6,6 @@ using MLAPI.Transports.UNET;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class MainMenu : MonoBehaviour {
     public GameObject startMenu;
