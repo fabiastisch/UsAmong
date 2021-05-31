@@ -28,10 +28,10 @@ public class LocalGameManager : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        LobbyManager.OnPlayerSpawned += OnPlayerSpawned;
+        LobbyManager.OnLocalPlayerSpawned += OnLocalPlayerSpawned;
     }
 
-    private void OnPlayerSpawned(ulong clientId) {
+    private void OnLocalPlayerSpawned(ulong clientId) {
         if (!NetworkManager.Singleton.LocalClientId.Equals(clientId)) {
             return;
         }

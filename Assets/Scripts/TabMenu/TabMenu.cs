@@ -43,35 +43,29 @@ namespace TabMenu {
             }
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
-           
-        }
+            UpdateText("Not Loaded...");
+            LobbyManager.OnPlayerListUpdated += new Action<string[]>(list => {
+                string text = "";
+                foreach (string name in list) {
+                    text += name + "\n";
+                }
 
-        private void LobbyManagerOnOnPlayerSpawned(ulong obj) {
-            Debug.Log(obj + " spawned...");
-            MyNetworkManagerOnOnClientListChange();
-
-        }
-
-        private void MyNetworkManagerOnOnClientListChange() {
-            Debug.Log("ClientList Changed to: "+ MyNetworkManager.Instance.clientlist.Count.ToString());
-            List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
-            string names = "";
-            foreach (NetworkClient client in list) {
-                names += client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value;
-                names += "\n";
-            }
-            UpdateText(names);
+                UpdateText(text);
+            });
         }
 
         // Update is called once per frame
         void Update() {
-            /*
-             if (Input.GetKeyDown(KeyCode.Tab)) {
-             
-                tab.SetActive(!tab.activeSelf);
-                MyNetworkManagerOnOnClientListChange();
+            if (Input.GetKey(KeyCode.Tab)) {
+                if (!tab.activeSelf) {
+                    tab.SetActive(true);
+                }
             }
-            */
+            else { // Key not pressed
+                if (tab.activeSelf) {
+                    tab.SetActive(false);
+                }
+            }
         }
 
         public void UpdateText(string text) {
