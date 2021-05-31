@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using MLAPI;
-using MLAPI.Connection;
-using Player;
 using TMPro;
 using UnityEngine;
-using Utils;
 
 namespace TabMenu {
     public class TabMenu : MonoBehaviour {
@@ -44,14 +39,14 @@ namespace TabMenu {
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
             UpdateText("Not Loaded...");
-            LobbyManager.OnPlayerListUpdated += new Action<string[]>(list => {
+            LobbyManager.OnPlayerListUpdated += list => {
                 string text = "";
                 foreach (string name in list) {
                     text += name + "\n";
                 }
 
                 UpdateText(text);
-            });
+            };
         }
 
         // Update is called once per frame
