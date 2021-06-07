@@ -1,12 +1,10 @@
 using System;
 using UnityEngine.UI;
 
-namespace Chat
-{
+namespace Chat {
     [System.Serializable]
-    public class Message
-    {
+    public class Message {
         public String text;
-        public Text textObject;
+        //public Text textObject;
     }
 }

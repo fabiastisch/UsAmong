@@ -2266,6 +2266,9 @@ MonoBehaviour:
     - Prefab: {fileID: 8324204290173665908, guid: 8273cbaa16610354d94860bfe7ed2b23,
         type: 3}
       PlayerPrefab: 0
+    - Prefab: {fileID: 3942613650271538604, guid: d94d414b0421a4d4c9d393d062f68d21,
+        type: 3}
+      PlayerPrefab: 0
     - Prefab: {fileID: 8985095211633594649, guid: 6c21678889121b040a43534890cdd659,
         type: 3}
       PlayerPrefab: 1

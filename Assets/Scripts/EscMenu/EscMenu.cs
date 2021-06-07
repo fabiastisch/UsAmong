@@ -34,7 +34,7 @@ namespace EscMenu {
         // Start is called before the first frame update
         void Start() {
             if (this.transform.childCount == 1) {
-                this.transform.GetChild(0).gameObject.SetActive(true);
+                this.transform.GetChild(0).gameObject.SetActive(false);
             }
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
