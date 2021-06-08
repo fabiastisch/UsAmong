@@ -66,7 +66,6 @@ namespace Chat {
         [ClientRpc]
         public void OnMessageSendClientRPC(string playerName, string chatBoxText) {
             if (chatList.Count >= maxMessages) {
-                Debug.Log("Destory last object");
                 Destroy(chatList[0].gameObject);
                 chatList.Remove(chatList[0]);
             }

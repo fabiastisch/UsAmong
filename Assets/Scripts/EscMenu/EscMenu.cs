@@ -31,10 +31,13 @@ namespace EscMenu {
         */
         private readonly List<GameObject> _list = new List<GameObject>();
 
+        private GameObject canvas;
+
         // Start is called before the first frame update
         void Start() {
             if (this.transform.childCount == 1) {
                 this.transform.GetChild(0).gameObject.SetActive(false);
+                canvas = this.transform.GetChild(0).gameObject;
             }
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
@@ -47,6 +50,7 @@ namespace EscMenu {
         // Update is called once per frame
         void Update() {
             if (Input.GetKeyDown(KeyCode.Escape)) {
+                canvas.SetActive(!canvas.activeSelf);
                 SetActive(escMenu.activeSelf ? null : escMenu);
             }
         }
