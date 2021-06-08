@@ -35,8 +35,9 @@ public class LocalGameManager : MonoBehaviour {
         if (!NetworkManager.Singleton.LocalClientId.Equals(clientId)) {
             return;
         }
-        GameObject o = NetworkSpawnManager.GetLocalPlayerObject().gameObject;
-        o.GetComponent<PlayerStuff>().PlayerName.Value = playerName;
+        NetworkObject o = NetworkSpawnManager.GetLocalPlayerObject();
+        Debug.Log("OnLocalPlayerSpawned, " + o);
+        o.gameObject.GetComponent<PlayerStuff>().PlayerName.Value = playerName;
     }
 
 }

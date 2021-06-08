@@ -4,6 +4,7 @@ using System.Linq;
 using MLAPI;
 using MLAPI.Connection;
 using MLAPI.Messaging;
+using MLAPI.Spawning;
 using Player;
 using UnityEngine;
 using Utils;
@@ -91,11 +92,24 @@ public class LobbyManager : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     private void UpdatePlayerListServerRpc(ulong clientId) {
         List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
-        List<string> playerNameList = list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-
+        List<string> playerNameList =
+            list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
         UpdatePlayerListClientRpc(playerNameList.ToArray());
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void StartGameServerRpc(Vector3 startGamePos) {
+        StartGameClientRpc(startGamePos);
+    }
+
+    [ClientRpc]
+    public void StartGameClientRpc(Vector3 startGamePos) {
+        GameObject localPlayer = this.getLocalPlayer();
+        Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
+        localPlayer.transform.position = startGamePos;
+        // startGamePos += new Vector3(2f, 0);
+    }
+    
     [ClientRpc]
     private void UpdatePlayerListClientRpc(string[] playerNameList) {
         //Debug.Log("UpdatePlayerListClientRpc"+playerNameList.Length);
@@ -106,5 +120,9 @@ public class LobbyManager : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void DestroyMeServerRpc() {
         player.GetComponent<NetworkObject>().Despawn(true);
+    }
+
+    public GameObject getLocalPlayer() {
+        return NetworkSpawnManager.GetLocalPlayerObject().gameObject;;
     }
 }
