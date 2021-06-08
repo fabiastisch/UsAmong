@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
-using MLAPI.NetworkVariable.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -31,16 +29,11 @@ namespace Chat {
             }
         }
 
-        private void MessageListOnOnListChanged(NetworkListEvent<string> changeevent) {
-            Debug.Log("MessageListOnOnListChanged");
-        }
-
         // Update is called once per frame
         void Update() {
             if (chatBox.text != "") {
                 if (Input.GetKeyDown(KeyCode.Return)) {
-                   // sendMessageToChat(chatBox.text);
-                   SendMessageSendServerRPC(LocalGameManager.Singleton.playerName, chatBox.text);
+                    MessageSendServerRPC(LocalGameManager.Singleton.playerName, chatBox.text);
                     chatBox.text = "";
                 }
             }
@@ -50,16 +43,10 @@ namespace Chat {
                 }
             }
 
-            if (!chatBox.isFocused) {
-                if (Input.GetKeyDown(KeyCode.Space)) {
-                   // sendMessageToChat("You pressed the space key");
-                    Debug.Log("Space");
-                }
-            }
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void SendMessageSendServerRPC(string playerName, string chatBoxText) {
+        public void MessageSendServerRPC(string playerName, string chatBoxText) {
             OnMessageSendClientRPC(playerName, chatBoxText);
         }
 
