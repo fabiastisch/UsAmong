@@ -1,6 +1,4 @@
-﻿using System;
-using MLAPI;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AutoLoadMainMenu : MonoBehaviour {
     // Start is called before the first frame update

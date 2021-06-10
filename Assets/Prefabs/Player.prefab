@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 2102627434789169036}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -404,7 +404,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNameTMP: {fileID: 8797134009117796172}
-  playerName: Default Name
+  playerName:
+    m_InternalValue: 
 --- !u!1 &9033190354544462013
 GameObject:
   m_ObjectHideFlags: 0

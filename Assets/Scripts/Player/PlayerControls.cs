@@ -14,17 +14,17 @@ namespace Player {
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q)) {
+            if (Input.GetKeyDown(KeyCode.Q)) { // Kill Imposter Only
                 
             }
 
-            if (Input.GetKeyDown(KeyCode.R)) {
+            if (Input.GetKeyDown(KeyCode.R)) { // Report
                 
             }
             if (Input.GetKeyDown(KeyCode.Tab)) {
                 
             }
-            if (Input.GetKeyDown(KeyCode.E)) {
+            if (Input.GetKeyDown(KeyCode.E) ) { // Use
                 
             }
         }
