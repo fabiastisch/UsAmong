@@ -8,6 +8,7 @@ using Utils;
 namespace Player {
     [RequireComponent(typeof(NetworkObject))]
     public class PlayerStuff : NetworkBehaviour {
+        
         public TMP_Text playerNameTMP;
 
         [SerializeField]
