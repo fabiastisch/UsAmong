@@ -5,6 +5,8 @@ using Lobby;
 using MLAPI;
 using MLAPI.Connection;
 using MLAPI.Messaging;
+using MLAPI.NetworkVariable;
+using MLAPI.NetworkVariable.Collections;
 using MLAPI.Spawning;
 using Player;
 using UnityEngine;
@@ -19,6 +21,13 @@ public class LobbyManager : NetworkBehaviour {
     public GameObject deadPlayerObject;
 
     private GameObject player;
+    
+    public static NetworkList<string> networkPlayerList = new NetworkList<string>(new NetworkVariableSettings()
+    {
+        ReadPermission = NetworkVariablePermission.Everyone,
+        WritePermission = NetworkVariablePermission.Everyone,
+        SendTickrate = 5
+    }, new List<string>());
 
 
     /**
@@ -28,7 +37,7 @@ public class LobbyManager : NetworkBehaviour {
 
     private static event Action<ulong> OnPlayerSpawned;
 
-    public static event Action<string[]> OnPlayerListUpdated;
+    public static event Action OnPlayerListUpdated;
 
     #region SingletonPattern
 
@@ -40,7 +49,6 @@ public class LobbyManager : NetworkBehaviour {
         if (Singleton == null) {
             Singleton = this;
             OnSingletonReady?.Invoke();
-            OnPlayerSpawned += this.OnNewPlayerSpawned;
         }
         else if (Singleton != this) {
             Debug.LogWarning("Lobby Manager already exist.");
@@ -84,24 +92,40 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    private void SpawnedPlayerClientRpc(ulong clientId) {
-        if (clientId.Equals(NetUtils.LocalClientId)) {
+    private void SpawnedPlayerClientRpc(ulong clientId)
+    {
+        if (clientId.Equals(NetUtils.LocalClientId))
+        {
             OnLocalPlayerSpawned?.Invoke(clientId);
-            UpdatePlayerListServerRpc(clientId);
+            Debug.Log("[SpawnedPlayerClientRpc]: " + clientId);
+            UpdatePlayerListServerRPC();
         }
 
         OnPlayerSpawned?.Invoke(clientId);
     }
-
-    private void OnNewPlayerSpawned(ulong clientId) {
-    }
-
+    
+    
     [ServerRpc(RequireOwnership = false)]
-    private void UpdatePlayerListServerRpc(ulong clientId) {
+    public void UpdatePlayerListServerRPC() {
         List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
-        List<string> playerNameList =
+        List<string> playerList =
             list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-        UpdatePlayerListClientRpc(playerNameList.ToArray());
+
+        foreach (string player in playerList)
+        {
+            if (!networkPlayerList.Contains(player))
+            {
+                networkPlayerList.Add(player);
+            }
+        }
+
+        OnPlayerListUpdated?.Invoke();
+        UpdatePlayerListClientRpc();
+    }
+    
+    [ClientRpc]
+    private void UpdatePlayerListClientRpc() {
+        OnPlayerListUpdated?.Invoke();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -110,22 +134,13 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void StartGameClientRpc(Vector3 startGamePos) {
+    public void StartGameClientRpc(Vector3 startGamePos)
+    {
         GameObject localPlayer = this.getLocalPlayer();
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
         StartButton.Instance.SetStartButtonActive(false);
         localPlayer.transform.position = startGamePos;
         // startGamePos += new Vector3(2f, 0);
-    }
-    
-    [ClientRpc]
-    private void UpdatePlayerListClientRpc(string[] playerNameList) {
-        Debug.Log("UpdatePlayerListClientRpc"+playerNameList.Length);
-        foreach (string s in playerNameList) {
-            Debug.Log("UpdatePlayerListClientRpc] " + s);
-        }
-
-        OnPlayerListUpdated?.Invoke(playerNameList);
     }
 
 
@@ -136,14 +151,6 @@ public class LobbyManager : NetworkBehaviour {
 
     public GameObject getLocalPlayer() {
         return NetworkSpawnManager.GetLocalPlayerObject().gameObject;;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void UpdatePlayerListServerRPC() {
-        List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
-        List<string> playerNameList =
-            list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-        OnPlayerListUpdated?.Invoke(playerNameList.ToArray());
     }
     
 }

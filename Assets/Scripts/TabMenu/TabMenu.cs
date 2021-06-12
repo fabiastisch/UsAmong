@@ -42,11 +42,13 @@ namespace TabMenu {
             LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
         }
 
-        private void OnLobbyManagerOnOnPlayerListUpdated(string[] list) {
+        private void OnLobbyManagerOnOnPlayerListUpdated()
+        {
             string text = "";
 
-            foreach (string name in list) {
+            foreach (string name in LobbyManager.networkPlayerList) {
                 text += name + "\n";
+                Debug.Log(name);
             }
 
             UpdateText(text);
