@@ -7,6 +7,7 @@ namespace Player {
     public class PlayerLife : NetworkBehaviour {
         
         public bool isAlive = true;
+        public bool isReported = false;
 
         public void Kill() {
             isAlive = false;
