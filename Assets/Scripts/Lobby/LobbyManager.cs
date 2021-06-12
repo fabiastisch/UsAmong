@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lobby;
 using MLAPI;
 using MLAPI.Connection;
 using MLAPI.Messaging;
@@ -106,6 +107,7 @@ public class LobbyManager : NetworkBehaviour {
     public void StartGameClientRpc(Vector3 startGamePos) {
         GameObject localPlayer = this.getLocalPlayer();
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
+        StartButton.Instance.SetStartButtonActive(false);
         localPlayer.transform.position = startGamePos;
         // startGamePos += new Vector3(2f, 0);
     }
