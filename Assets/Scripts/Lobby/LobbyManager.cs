@@ -16,6 +16,8 @@ using Random = UnityEngine.Random;
 public class LobbyManager : NetworkBehaviour {
     public GameObject playerObject;
 
+    public GameObject deadPlayerObject;
+
     private GameObject player;
 
     /**
