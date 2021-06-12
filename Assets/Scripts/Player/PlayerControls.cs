@@ -28,7 +28,7 @@ namespace Player {
                 foreach (Collider2D playerCollider in colliders) {
                     
                     GameObject otherPlayer = playerCollider.transform.parent.gameObject;
-                    if (CheckForPlayer(playerCollider, otherPlayer))
+                    if (!CheckForPlayer(otherPlayer))
                     {
                         continue;
                     }
@@ -62,7 +62,7 @@ namespace Player {
                 {
                     GameObject otherPlayer = playerCollider.transform.parent.gameObject;
                     
-                    if (CheckForPlayer(playerCollider, otherPlayer))
+                    if (!CheckForPlayer(otherPlayer))
                     {
                         continue;
                     }
@@ -91,10 +91,10 @@ namespace Player {
             }
         }
 
-        private bool CheckForPlayer(Collider2D playerCollider, GameObject otherGameObject)
+        private bool CheckForPlayer(GameObject otherGameObject)
         {
             if (!otherGameObject.CompareTag("Player")) {
-                Debug.Log("[ON KILL] Object is not Player?: " + otherGameObject);
+                Debug.Log("[CheckForPlayer] Object is not Player?: " + otherGameObject);
                 return false;
             }
             return true;
@@ -103,7 +103,7 @@ namespace Player {
         private Collider2D[] CheckSorroundingArea()
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), killRadius, LayerMask.GetMask("Player"));
-            Debug.Log("[ON KILL] Collider size: " + colliders.Length);
+            Debug.Log("[CheckSorroundingArea] Collider size: " + colliders.Length);
             Array.Sort(colliders,
                 (collider1, collider2) => (int) (UtilsUnity.getDistanceBetweenGameObjects(collider1.gameObject, gameObject) -
                                                  UtilsUnity.getDistanceBetweenGameObjects(collider2.gameObject, gameObject)));

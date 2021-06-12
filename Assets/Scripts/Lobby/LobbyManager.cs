@@ -20,6 +20,7 @@ public class LobbyManager : NetworkBehaviour {
 
     private GameObject player;
 
+
     /**
      * Event get's invoke, after Local Player was Spawned.
      */
@@ -66,6 +67,9 @@ public class LobbyManager : NetworkBehaviour {
         }
     }
 
+    /*
+     * Server Side
+     */
     private void SpawnPlayer(ulong clientId) {
         Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
         player = Instantiate(playerObject, random, Quaternion.identity);
@@ -116,7 +120,11 @@ public class LobbyManager : NetworkBehaviour {
     
     [ClientRpc]
     private void UpdatePlayerListClientRpc(string[] playerNameList) {
-        //Debug.Log("UpdatePlayerListClientRpc"+playerNameList.Length);
+        Debug.Log("UpdatePlayerListClientRpc"+playerNameList.Length);
+        foreach (string s in playerNameList) {
+            Debug.Log("UpdatePlayerListClientRpc] " + s);
+        }
+
         OnPlayerListUpdated?.Invoke(playerNameList);
     }
 
@@ -129,4 +137,13 @@ public class LobbyManager : NetworkBehaviour {
     public GameObject getLocalPlayer() {
         return NetworkSpawnManager.GetLocalPlayerObject().gameObject;;
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void UpdatePlayerListServerRPC() {
+        List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
+        List<string> playerNameList =
+            list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
+        OnPlayerListUpdated?.Invoke(playerNameList.ToArray());
+    }
+    
 }

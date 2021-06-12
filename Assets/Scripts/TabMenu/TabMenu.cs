@@ -39,24 +39,33 @@ namespace TabMenu {
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
             UpdateText("Not Loaded...");
-            LobbyManager.OnPlayerListUpdated += list => {
-                string text = "";
-                foreach (string name in list) {
-                    text += name + "\n";
-                }
+            LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
+        }
 
-                UpdateText(text);
-            };
+        private void OnLobbyManagerOnOnPlayerListUpdated(string[] list) {
+            string text = "";
+
+            foreach (string name in list) {
+                text += name + "\n";
+            }
+
+            UpdateText(text);
+        }
+
+        private void OnDestroy() {
+            LobbyManager.OnPlayerListUpdated -= OnLobbyManagerOnOnPlayerListUpdated;
         }
 
         // Update is called once per frame
         void Update() {
             if (Input.GetKey(KeyCode.Tab)) {
                 if (!tab.activeSelf) {
+                    LobbyManager.Singleton.UpdatePlayerListServerRPC();
                     tab.SetActive(true);
                 }
             }
-            else { // Key not pressed
+            else {
+                // Key not pressed
                 if (tab.activeSelf) {
                     tab.SetActive(false);
                 }
