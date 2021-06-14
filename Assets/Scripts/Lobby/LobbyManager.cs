@@ -22,7 +22,7 @@ public class LobbyManager : NetworkBehaviour {
 
     private GameObject player;
     
-    public static NetworkList<string> networkPlayerList = new NetworkList<string>(new NetworkVariableSettings()
+    public NetworkList<string> networkPlayerList = new NetworkList<string>(new NetworkVariableSettings()
     {
         ReadPermission = NetworkVariablePermission.Everyone,
         WritePermission = NetworkVariablePermission.Everyone,
@@ -111,11 +111,17 @@ public class LobbyManager : NetworkBehaviour {
         List<string> playerList =
             list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
 
-        foreach (string player in playerList)
+        Debug.Log("UpdatePlayerList");
+        foreach (string playerName in playerList)
         {
-            if (!networkPlayerList.Contains(player))
+            if (playerName.Equals("")) {
+                Debug.LogWarning("Playername is empty");
+                continue;
+            }
+            Debug.Log(playerName);
+            if (!networkPlayerList.Contains(playerName))
             {
-                networkPlayerList.Add(player);
+                networkPlayerList.Add(playerName);
             }
         }
 

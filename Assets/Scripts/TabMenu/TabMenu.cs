@@ -1,4 +1,5 @@
 ﻿using System;
+using MLAPI.NetworkVariable.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -39,19 +40,31 @@ namespace TabMenu {
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
             UpdateText("Not Loaded...");
-            LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
+            // LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
+            LobbyManager.OnSingletonReady += () =>
+                LobbyManager.Singleton.networkPlayerList.OnListChanged += NetworkPlayerListOnOnListChanged;
         }
 
-        private void OnLobbyManagerOnOnPlayerListUpdated()
-        {
+        private void NetworkPlayerListOnOnListChanged(NetworkListEvent<string> changeevent) {
+            string playerNameText = "";
+
+            foreach (string playerName in LobbyManager.Singleton.networkPlayerList) {
+                playerNameText += playerName + "\n";
+                Debug.Log(playerName);
+            }
+
+            UpdateText(playerNameText);
+        }
+
+        private void OnLobbyManagerOnOnPlayerListUpdated() {
             string text = "";
 
-            foreach (string name in LobbyManager.networkPlayerList) {
+            foreach (string name in LobbyManager.Singleton.networkPlayerList) {
                 text += name + "\n";
                 Debug.Log(name);
             }
 
-            UpdateText(text);
+            //UpdateText(text);
         }
 
         private void OnDestroy() {
