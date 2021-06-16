@@ -94,8 +94,8 @@ public class LobbyManager : NetworkBehaviour {
     [ClientRpc]
     private void SpawnedPlayerClientRpc(ulong clientId)
     {
-        if (clientId.Equals(NetUtils.LocalClientId))
-        {
+        if (clientId.Equals(NetUtils.LocalClientId)) {
+            Debug.Log("Local Player Obj: " + NetworkSpawnManager.GetLocalPlayerObject());
             OnLocalPlayerSpawned?.Invoke(clientId);
             Debug.Log("[SpawnedPlayerClientRpc]: " + clientId);
             UpdatePlayerListServerRPC();

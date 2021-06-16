@@ -1,5 +1,6 @@
 ﻿using System;
 using MLAPI;
+using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Player {
         public TMP_Text playerNameTMP;
 
         [SerializeField]
-        private NetworkVariableString playerName = new NetworkVariableString(NetUtils.Everyone);
+        private NetworkVariableString playerName = new NetworkVariableString(NetUtils.Everyone, "undefined");
 
         public NetworkVariableString PlayerName => playerName;
         
@@ -25,8 +26,19 @@ namespace Player {
         }
 
         private void OnPlayerNameChanged(string previousvalue, string newvalue) {
-            playerNameTMP.text = newvalue;
+            if (playerNameTMP) {
+                playerNameTMP.text = newvalue;
+            }
+            else {
+                Debug.LogWarning("[PlayerStuff] playerNameTMP : " + playerNameTMP);
+            }
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void DestroyMeServerRpc() {
+            Debug.Log("[DestroyMeServerRPC]");
+            //NetworkManager.Destroy(GetComponent<NetworkObject>());
+            GetComponent<NetworkObject>().Despawn(true);
+        }
     }
 }

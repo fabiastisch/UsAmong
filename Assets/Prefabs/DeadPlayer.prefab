@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1618007245889331932}
   - component: {fileID: 1618007245889331933}
   - component: {fileID: 4161480021275887736}
+  - component: {fileID: 4366819041039479203}
   m_Layer: 8
   m_Name: DeadPlayer
   m_TagString: Player
@@ -63,7 +64,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAlive: 0
-  isReported: 1
+  isReported: 0
+  isReportable: 1
+--- !u!114 &4366819041039479203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618007245889331935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522846aae7b5483498a264db22644529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNameTMP: {fileID: 0}
+  playerName:
+    m_InternalValue: undefined
 --- !u!1001 &1618007245717932727
 PrefabInstance:
   m_ObjectHideFlags: 0

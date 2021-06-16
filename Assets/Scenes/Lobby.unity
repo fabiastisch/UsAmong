@@ -404,6 +404,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeadPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 4161480021275887736, guid: a31de8abb9cb23e4bb140a16cf4f97d9,
+        type: 3}
+      propertyPath: isReported
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4161480021275887736, guid: a31de8abb9cb23e4bb140a16cf4f97d9,
+        type: 3}
+      propertyPath: isReportable
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a31de8abb9cb23e4bb140a16cf4f97d9, type: 3}
 --- !u!1 &188112953 stripped
@@ -1414,6 +1424,80 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 891058704}
   m_CullTransparentMesh: 0
+--- !u!1 &937980969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 937980972}
+  - component: {fileID: 937980971}
+  - component: {fileID: 937980970}
+  - component: {fileID: 937980973}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &937980970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937980969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6adff9ce741ce4bb2d03f828075bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &937980971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937980969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetworkInstanceId: 0
+  PrefabHash: 13494567273885427380
+  PrefabHashGenerator: GameManager
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+--- !u!4 &937980972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937980969}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -17.859756, y: -17.077883, z: -5.261138}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &937980973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937980969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b8394dc8c50774ea546d8f23ea8207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1084964239
 PrefabInstance:
   m_ObjectHideFlags: 0
