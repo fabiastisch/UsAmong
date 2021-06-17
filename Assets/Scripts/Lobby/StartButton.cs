@@ -34,7 +34,7 @@ namespace Lobby {
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
             //SceneLoaderManager.LoadGame();
-            GameManager.Singleton.SetAllPlayerAliveServerRpc();
+            // GameManager.Singleton.SetAllPlayerAliveServerRpc();
             LobbyManager.Singleton.StartGameServerRpc(start.position);
             //LobbyManager.Singleton.getLocalPlayer().transform.position = start.position;
         }

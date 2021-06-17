@@ -2,7 +2,6 @@
 using MLAPI;
 using MLAPI.Messaging;
 using UnityEngine;
-using Utils;
 
 namespace Player {
     [RequireComponent(typeof(NetworkObject))]
@@ -13,12 +12,16 @@ namespace Player {
 
         public void Kill() {
             isAlive = false;
-            GameManager.Singleton.ChangePlayerStatusServerRpc(NetUtils.LocalClientId, false);
-            KillServerRPC();
+            //GameManager.Singleton.ChangePlayerStatusServerRpc(GetComponent<NetworkObject>().OwnerClientId, false);
+            
+            KillServerRPC(GetComponent<NetworkObject>().OwnerClientId);
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void KillServerRPC() {
+        private void KillServerRPC(ulong killedPlayerId) {
+            NetworkObject netObj = NetworkManager.ConnectedClients[killedPlayerId].PlayerObject;
+            netObj.GetComponent<PlayerStuff>().PlayerName.Value += " [DEAD]";
+            
             GameObject deadBody = LobbyManager.Singleton.deadPlayerObject;
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
             // instanceDeadBody.GetComponent<PlayerLife>().isAlive = false;

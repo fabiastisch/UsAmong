@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MLAPI;
 using MLAPI.Messaging;
+using Player;
 using UnityEngine;
 using Utils;
 
@@ -57,7 +58,16 @@ namespace Game {
             deadPlayerList = new List<ulong>();
             alivePlayerList = connectionList;
 
+
             foreach (ulong id in connectionList) {
+                NetworkObject netObj = NetworkManager.ConnectedClients[id].PlayerObject;
+                if (netObj.GetComponent<PlayerStuff>().PlayerName.Value.EndsWith("[DEAD]")) {
+                    netObj.GetComponent<PlayerStuff>().PlayerName.Value = netObj.GetComponent<PlayerStuff>().PlayerName.Value.Replace("[DEAD]", "");
+                }
+            }
+
+
+            /*foreach (ulong id in connectionList) {
                 NetworkObject netObj = NetworkManager.ConnectedClients[id].PlayerObject;
                 foreach (ulong otherId in connectionList) {
                     if (!netObj.IsNetworkVisibleTo(otherId)) {
@@ -65,7 +75,7 @@ namespace Game {
                         
                     }
                 }                
-            }
+            }*/
         }
 
 
@@ -91,6 +101,16 @@ namespace Game {
             }
 
             NetworkObject netObj = NetworkManager.ConnectedClients[clientId].PlayerObject;
+            if (alive) {
+                if (netObj.GetComponent<PlayerStuff>().PlayerName.Value.EndsWith("[DEAD]")) {
+                    netObj.GetComponent<PlayerStuff>().PlayerName.Value.Replace("[DEAD]", "");
+                }
+            }
+            else {
+                netObj.GetComponent<PlayerStuff>().PlayerName.Value += " [DEAD]";
+            }
+
+            /*NetworkObject netObj = NetworkManager.ConnectedClients[clientId].PlayerObject;
             foreach (ulong id in alivePlayerList) {
                 NetworkObject otherNetObj = NetworkManager.ConnectedClients[id].PlayerObject;
 
@@ -103,7 +123,7 @@ namespace Game {
                 if (!netObj.IsNetworkVisibleTo(id)) { 
                     netObj.NetworkShow(id);
                 }
-            }
+            }*/
         }
     }
 }
