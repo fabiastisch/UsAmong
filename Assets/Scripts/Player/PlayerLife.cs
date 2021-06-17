@@ -1,5 +1,4 @@
-﻿using Game;
-using MLAPI;
+﻿using MLAPI;
 using MLAPI.Messaging;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ namespace Player {
 
         public void Kill() {
             isAlive = false;
-            //GameManager.Singleton.ChangePlayerStatusServerRpc(GetComponent<NetworkObject>().OwnerClientId, false);
             
             KillServerRPC(GetComponent<NetworkObject>().OwnerClientId);
         }
