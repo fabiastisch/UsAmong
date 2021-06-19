@@ -63,8 +63,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965a358da716121438e02685f6d84d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAlive: 0
-  isReported: 0
+  isAliveNetVar:
+    m_InternalValue: 0
   isReportable: 1
 --- !u!114 &4366819041039479203
 MonoBehaviour:

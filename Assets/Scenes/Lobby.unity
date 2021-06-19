@@ -414,6 +414,11 @@ PrefabInstance:
       propertyPath: isReportable
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4161480021275887736, guid: a31de8abb9cb23e4bb140a16cf4f97d9,
+        type: 3}
+      propertyPath: isAliveNetVar.m_InternalValue
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a31de8abb9cb23e4bb140a16cf4f97d9, type: 3}
 --- !u!1 &188112953 stripped

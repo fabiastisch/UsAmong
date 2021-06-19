@@ -1,16 +1,18 @@
 ﻿using MLAPI;
 using MLAPI.Messaging;
+using MLAPI.NetworkVariable;
 using UnityEngine;
+using Utils;
 
 namespace Player {
     [RequireComponent(typeof(NetworkObject))]
     public class PlayerLife : NetworkBehaviour {
-        public bool isAlive = true;
+        public NetworkVariableBool isAliveNetVar = new NetworkVariableBool(NetUtils.Everyone, true);
         public bool isReportable = false;
 
 
         public void Kill() {
-            isAlive = false;
+            isAliveNetVar.Value = false;
             
             KillServerRPC(GetComponent<NetworkObject>().OwnerClientId);
         }

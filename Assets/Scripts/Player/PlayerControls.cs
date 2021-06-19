@@ -9,9 +9,11 @@ namespace Player {
     [RequireComponent(typeof(NetworkObject))]
     public class PlayerControls : NetworkBehaviour {
         public float killRadius = 3;
+        private PlayerLife _playerLife;
 
         // Start is called before the first frame update
         void Start() {
+            _playerLife = GetComponent<PlayerLife>();
         }
 
         // Update is called once per frame
@@ -20,6 +22,9 @@ namespace Player {
                 return;
             }
 
+            if (!_playerLife.isAliveNetVar.Value) {
+                return;
+            }
 
             if (Input.GetKeyDown(KeyCode.Q)) {
                 // Kill Imposter Only
@@ -35,7 +40,7 @@ namespace Player {
                     if (!otherPlayer.Equals(gameObject)) {
                         PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
                         if (otherPlayerLife) {
-                            if (!otherPlayerLife.isAlive) {
+                            if (!otherPlayerLife.isAliveNetVar.Value) {
                                 Debug.Log("[ON KILL] Other Player isn't Alive");
                                 break;
                             }
@@ -69,7 +74,7 @@ namespace Player {
                     if (!otherPlayer.Equals(gameObject)) {
                         PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
                         if (otherPlayerLife) {
-                            if (!otherPlayerLife.isAlive && otherPlayerLife.isReportable) {
+                            if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
                                 // otherPlayerLife.isReported = true;
                                 Debug.Log("[ON REPORT] report player: " + otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                                 otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
@@ -120,7 +125,7 @@ namespace Player {
         public void StartConsultationClientRpc(Vector3 consultationPosition) {
             GameObject localPlayer = getLocalPlayer();
             PlayerLife playerLife = localPlayer.GetComponent<PlayerLife>();
-            if (playerLife.isAlive) {
+            if (playerLife.isAliveNetVar.Value) {
                 Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                 localPlayer.transform.position = consultationPosition;
             }
