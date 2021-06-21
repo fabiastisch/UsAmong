@@ -2,12 +2,12 @@
 using UnityEngine;
 
 namespace Lobby {
-    public class StartButton : MonoBehaviour {
+    public class CanvasLogic : MonoBehaviour {
         #region SingletonPattern
 
-        private static StartButton instance;
+        private static CanvasLogic instance;
 
-        public static StartButton Instance {
+        public static CanvasLogic Instance {
             get => instance;
         }
 
@@ -30,6 +30,8 @@ namespace Lobby {
 
         public GameObject button;
 
+        public GameObject votingObj;
+
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
             //SceneLoaderManager.LoadGame();
@@ -39,6 +41,11 @@ namespace Lobby {
 
         public void SetStartButtonActive(bool value) {
             button.SetActive(value);
+        }
+
+        public void StartVoting() {
+            votingObj.SetActive(true);
+
         }
     }
 }

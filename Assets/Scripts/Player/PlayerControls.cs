@@ -1,4 +1,5 @@
 ﻿using System;
+using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
@@ -78,7 +79,10 @@ namespace Player {
                                 // otherPlayerLife.isReported = true;
                                 Debug.Log("[ON REPORT] report player: " + otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                                 otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
-                                StartConsultationServerRpc(Vector3.zero);
+                                
+                                VotingSelectionManager.Instance.SetPlayerServerRPC();
+                                Invoke(nameof(StartConsultationServerRpc),1);
+                                Invoke(nameof(VotingSelectionManager.Instance.EveluateConsultationServerRpc), 60);
                                 break;
                             }
                             else {
@@ -117,19 +121,23 @@ namespace Player {
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void StartConsultationServerRpc(Vector3 consultationPosition) {
+        public void StartConsultationServerRpc() {
+            Debug.Log("[PlayerControls]: StartConsultationServerRpc");
+            Vector3 consultationPosition = Vector3.zero;
             StartConsultationClientRpc(consultationPosition);
         }
 
         [ClientRpc]
         public void StartConsultationClientRpc(Vector3 consultationPosition) {
+            Debug.Log("[PlayerControls]: StartConsultationClientRpc");
             GameObject localPlayer = getLocalPlayer();
             PlayerLife playerLife = localPlayer.GetComponent<PlayerLife>();
             if (playerLife.isAliveNetVar.Value) {
                 Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                 localPlayer.transform.position = consultationPosition;
             }
-
+            
+            CanvasLogic.Instance.StartVoting();
             /*MainMenu.ActivateImposterSelection();*/
         }
 

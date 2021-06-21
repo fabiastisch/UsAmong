@@ -144,7 +144,7 @@ public class LobbyManager : NetworkBehaviour {
     {
         GameObject localPlayer = this.getLocalPlayer();
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-        StartButton.Instance.SetStartButtonActive(false);
+        CanvasLogic.Instance.SetStartButtonActive(false);
         localPlayer.transform.position = startGamePos;
         // startGamePos += new Vector3(2f, 0);
     }
