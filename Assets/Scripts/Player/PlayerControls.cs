@@ -129,6 +129,8 @@ namespace Player {
                 Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                 localPlayer.transform.position = consultationPosition;
             }
+
+            /*MainMenu.ActivateImposterSelection();*/
         }
 
         public GameObject getLocalPlayer() {

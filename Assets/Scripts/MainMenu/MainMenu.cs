@@ -11,7 +11,11 @@ public class MainMenu : MonoBehaviour {
     public GameObject startMenu;
     public GameObject playMenu;
     public GameObject optionMenu;
-
+    
+    /*
+    public GameObject imposterSelection;
+    */
+    
     private String username;
 
     public TMP_InputField ipAddressInput;
@@ -33,6 +37,15 @@ public class MainMenu : MonoBehaviour {
     public void ActivateOptionsMenu() {
         SetActive(optionMenu);
     }
+    
+    /*
+    public static void ActivateImposterSelection() {
+        foreach (var o in _list) {
+            o.SetActive(o == imposterSelection);
+        }
+        Invoke(ImposterSelection.EveluateConsultationServerRpc(), 60)
+    }
+    */
 
     /**
          * Method Called once before the first frame will be rendered.
@@ -43,6 +56,9 @@ public class MainMenu : MonoBehaviour {
         _list.Add(startMenu);
         _list.Add(playMenu);
         _list.Add(optionMenu);
+        /*
+        _list.Add(imposterSelection);
+        */
 
         SetActive(startMenu);
     }
