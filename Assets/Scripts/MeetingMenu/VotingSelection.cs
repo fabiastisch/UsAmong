@@ -10,7 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ImposterSelection : MonoBehaviour {
+public class VotingSelection : MonoBehaviour {
     public GameObject newButtonPrefab;
     public GameObject parent;
 
@@ -23,9 +23,9 @@ public class ImposterSelection : MonoBehaviour {
     
     #region SingletonPattern
 
-    private static ImposterSelection instance;
+    private static VotingSelection instance;
 
-    public static ImposterSelection Instance {
+    public static VotingSelection Instance {
         get => instance;
     }
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Chat;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
@@ -72,7 +73,7 @@ public class VotingSelectionManager : NetworkBehaviour {
     public void EveluateConsultationServerRpc() {
         Debug.Log("[VotingSelectionManager] EveluateConsultationServerRpc");
 
-        /*Dictionary<string, int> selectionResult = new Dictionary<string, int>();
+        Dictionary<string, int> selectionResult = new Dictionary<string, int>();
 
 
         foreach (string selectedPlayer in selectionList) {
@@ -82,16 +83,29 @@ public class VotingSelectionManager : NetworkBehaviour {
             else {
                 selectionResult[selectedPlayer] += 1;
             }
-        }*/
+        }
 
+        ArrayList electedToDie = new ArrayList();
+        foreach (var player in selectionResult.Keys) {
+            Debug.Log(player + ": " + selectionResult[player]);
 
-        var result = selectionList.GroupBy(x => x)
-            .Select(g => new {Value = g.Key, Count = g.Count()})
-            .OrderByDescending(x => x.Count);
+            if (electedToDie.Count == 0) {
+                electedToDie.Add(player);
+            }
+            else if (selectionResult[player] > selectionResult[electedToDie[0].ToString()]) {
+                electedToDie = new ArrayList();
+                electedToDie.Add(player);
+            }
+            else if (selectionResult[player] == selectionResult[electedToDie[0].ToString()]) {
+                electedToDie.Add(player);
+            }
+        }
 
-        // first is highest, last lowest votes
-        foreach (var val in result) {
-            Debug.Log("[VotingSelectionManager]: " + val.Count + " on Player: " + val.Value);
+        if (electedToDie.Count == 1) {
+            Debug.Log("[VotingSelectionManager] : " + electedToDie[0].ToString() + " wurde rausgevotet.");
+        }
+        else {
+            Debug.Log("[VotingSelectionManager] : Niemand wurde rausgevotet.");
         }
 
 
