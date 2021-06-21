@@ -64,7 +64,6 @@ public class ImposterSelection : MonoBehaviour {
 
         foreach (string player in VotingSelectionManager.Instance.GetPlayers()) {
             GameObject newButton = Instantiate(newButtonPrefab, buttonPosition, Quaternion.identity,parent.transform);
-            Debug.Log("Parent Trans: " + newButton.transform.parent.transform.position);
             //newButton.transform.position = position;
             //newButton.transform.SetParent(parent.transform);
 
@@ -79,7 +78,7 @@ public class ImposterSelection : MonoBehaviour {
             tempButton.onClick.AddListener(() => MakeSelection(player));
 
             // reicht für ca 4-5 Spieler
-            buttonPosition.y += 100;
+            buttonPosition.y -= 100;
         }
     }
 

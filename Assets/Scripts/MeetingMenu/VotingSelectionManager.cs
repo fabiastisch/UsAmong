@@ -28,8 +28,9 @@ public class VotingSelectionManager : NetworkBehaviour {
             OnSingletonReady?.Invoke();
         }
         else if (instance != this) {
+            instance = this;
             Debug.LogWarning("VotingSelectionManager already exist.");
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 
@@ -88,6 +89,7 @@ public class VotingSelectionManager : NetworkBehaviour {
             .Select(g => new {Value = g.Key, Count = g.Count()})
             .OrderByDescending(x => x.Count);
 
+        // first is highest, last lowest votes
         foreach (var val in result) {
             Debug.Log("[VotingSelectionManager]: " + val.Count + " on Player: " + val.Value);
         }

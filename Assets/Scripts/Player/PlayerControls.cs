@@ -82,7 +82,7 @@ namespace Player {
                                 
                                 VotingSelectionManager.Instance.SetPlayerServerRPC();
                                 Invoke(nameof(StartConsultationServerRpc),1);
-                                Invoke(nameof(VotingSelectionManager.Instance.EveluateConsultationServerRpc), 60);
+                                Invoke(nameof(StartEveluateConsultation), 20);
                                 break;
                             }
                             else {
@@ -99,6 +99,10 @@ namespace Player {
             if (Input.GetKeyDown(KeyCode.E)) {
                 // Use
             }
+        }
+
+        private void StartEveluateConsultation() {
+            VotingSelectionManager.Instance.EveluateConsultationServerRpc();
         }
 
         private bool CheckForPlayer(GameObject otherGameObject) {
