@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 
 namespace Lobby {
@@ -28,9 +29,15 @@ namespace Lobby {
         
         public Transform start;
 
-        public GameObject button;
+        public GameObject startButton;
 
         public GameObject votingObj;
+
+        public GameObject countdownObj;
+
+        private float countDownTimeLeft = 0f;
+        private bool isCountDownActive = false;
+        
 
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
@@ -40,12 +47,31 @@ namespace Lobby {
         }
 
         public void SetStartButtonActive(bool value) {
-            button.SetActive(value);
+            startButton.SetActive(value);
         }
 
         public void StartVoting() {
             votingObj.SetActive(true);
 
+        }
+
+        public void StartCountdown(int coundowntime) {
+            SetStartButtonActive(false);
+            countDownTimeLeft = coundowntime;
+            isCountDownActive = true;
+            countdownObj.SetActive(true);
+        }
+
+        public void StopCountdown() {
+            isCountDownActive = false;
+            countdownObj.SetActive(false);
+        }
+
+        private void Update() {
+            if (isCountDownActive) {
+                countDownTimeLeft -= Time.deltaTime;
+                countdownObj.GetComponent<TMP_Text>().text = ((int)countDownTimeLeft % 60 + 1).ToString();   
+            }
         }
     }
 }

@@ -38,15 +38,6 @@ public class MainMenu : MonoBehaviour {
         SetActive(optionMenu);
     }
     
-    /*
-    public static void ActivateImposterSelection() {
-        foreach (var o in _list) {
-            o.SetActive(o == imposterSelection);
-        }
-        Invoke(ImposterSelection.EveluateConsultationServerRpc(), 60)
-    }
-    */
-
     /**
          * Method Called once before the first frame will be rendered.
          * Add every Menu to _list.

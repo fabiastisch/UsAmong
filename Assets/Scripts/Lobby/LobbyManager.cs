@@ -21,9 +21,8 @@ public class LobbyManager : NetworkBehaviour {
     public GameObject deadPlayerObject;
 
     private GameObject player;
-    
-    public NetworkList<string> networkPlayerList = new NetworkList<string>(new NetworkVariableSettings()
-    {
+
+    public NetworkList<string> networkPlayerList = new NetworkList<string>(new NetworkVariableSettings() {
         ReadPermission = NetworkVariablePermission.Everyone,
         WritePermission = NetworkVariablePermission.Everyone,
         SendTickrate = 5
@@ -57,6 +56,11 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     #endregion
+
+    /**
+     * On Server
+     */
+    private Vector3 startGamePos;
 
     // Start is called before the first frame update
     void Start() {
@@ -92,8 +96,7 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    private void SpawnedPlayerClientRpc(ulong clientId)
-    {
+    private void SpawnedPlayerClientRpc(ulong clientId) {
         if (clientId.Equals(NetUtils.LocalClientId)) {
             Debug.Log("Local Player Obj: " + NetworkSpawnManager.GetLocalPlayerObject());
             OnLocalPlayerSpawned?.Invoke(clientId);
@@ -103,8 +106,8 @@ public class LobbyManager : NetworkBehaviour {
 
         OnPlayerSpawned?.Invoke(clientId);
     }
-    
-    
+
+
     [ServerRpc(RequireOwnership = false)]
     public void UpdatePlayerListServerRPC() {
         List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
@@ -112,15 +115,14 @@ public class LobbyManager : NetworkBehaviour {
             list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
 
         Debug.Log("UpdatePlayerList");
-        foreach (string playerName in playerList)
-        {
+        foreach (string playerName in playerList) {
             if (playerName.Equals("")) {
                 Debug.LogWarning("Playername is empty");
                 continue;
             }
+
             Debug.Log(playerName);
-            if (!networkPlayerList.Contains(playerName))
-            {
+            if (!networkPlayerList.Contains(playerName)) {
                 networkPlayerList.Add(playerName);
             }
         }
@@ -128,7 +130,7 @@ public class LobbyManager : NetworkBehaviour {
         OnPlayerListUpdated?.Invoke();
         UpdatePlayerListClientRpc();
     }
-    
+
     [ClientRpc]
     private void UpdatePlayerListClientRpc() {
         OnPlayerListUpdated?.Invoke();
@@ -136,15 +138,29 @@ public class LobbyManager : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     public void StartGameServerRpc(Vector3 startGamePos) {
+        this.startGamePos = startGamePos;
+        int coundowntime = 10;
+        PreStartGameClientRpc(coundowntime);
+        Invoke(nameof(StartGame), coundowntime);
+    }
+
+    /**
+     * On Server to call ClientRpc
+     */
+    private void StartGame() {
         StartGameClientRpc(startGamePos);
     }
 
     [ClientRpc]
-    public void StartGameClientRpc(Vector3 startGamePos)
-    {
+    private void PreStartGameClientRpc(int coundowntime) {
+        CanvasLogic.Instance.StartCountdown(coundowntime);
+    }
+
+    [ClientRpc]
+    public void StartGameClientRpc(Vector3 startGamePos) {
+        CanvasLogic.Instance.StopCountdown();
         GameObject localPlayer = this.getLocalPlayer();
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-        CanvasLogic.Instance.SetStartButtonActive(false);
         localPlayer.transform.position = startGamePos;
         // startGamePos += new Vector3(2f, 0);
     }
@@ -156,7 +172,7 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     public GameObject getLocalPlayer() {
-        return NetworkSpawnManager.GetLocalPlayerObject().gameObject;;
+        return NetworkSpawnManager.GetLocalPlayerObject().gameObject;
+        ;
     }
-    
 }
