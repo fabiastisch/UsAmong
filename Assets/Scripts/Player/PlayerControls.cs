@@ -82,7 +82,7 @@ namespace Player {
                                 
                                 VotingSelectionManager.Instance.SetPlayerServerRPC();
                                 Invoke(nameof(StartConsultationServerRpc),1);
-                                Invoke(nameof(StartEveluateConsultation), 20);
+                                Invoke(nameof(StartEveluateConsultation), 21); // TODO: always check CanvasLogic:StartVoting countdown time
                                 break;
                             }
                             else {

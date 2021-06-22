@@ -52,7 +52,7 @@ namespace Lobby {
 
         public void StartVoting() {
             votingObj.SetActive(true);
-
+            StartCountdown(20); // TODO: always update Countdown with voting time 
         }
 
         public void StartCountdown(int coundowntime) {

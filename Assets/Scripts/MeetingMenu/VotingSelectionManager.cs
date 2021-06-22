@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
@@ -108,10 +109,16 @@ public class VotingSelectionManager : NetworkBehaviour {
 
 
         selectionList.Clear();
+        
+        AfterConsultationEvaluationClientRpc();
 
         //EveluateConsultationClientRpc(selectionResult);
     }
 
+    [ClientRpc]
+    public void AfterConsultationEvaluationClientRpc() {
+        CanvasLogic.Instance.StopCountdown();
+    }
 
     /*
     [ClientRpc]
