@@ -139,7 +139,7 @@ public class LobbyManager : NetworkBehaviour {
     [ServerRpc(RequireOwnership = false)]
     public void StartGameServerRpc(Vector3 startGamePos) {
         this.startGamePos = startGamePos;
-        int coundowntime = 10;
+        int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
         Invoke(nameof(StartGame), coundowntime);
     }
