@@ -10,13 +10,13 @@ namespace Player {
     public class PlayerLife : NetworkBehaviour {
         public NetworkVariableBool isAliveNetVar = new NetworkVariableBool(NetUtils.Everyone, true);
         public bool isReportable = false;
-        public NetworkVariableBool isImposter = new NetworkVariableBool(NetUtils.Everyone, false);
+        public NetworkVariableBool isImposterNetVar = new NetworkVariableBool(NetUtils.Everyone, false);
 
         private void Start() {
             // Change Color if Imposter
-            isImposter.OnValueChanged += (value, newValue) => {
+            isImposterNetVar.OnValueChanged += (value, newValue) => {
                 GameObject local = NetUtils.GetLocalObject().gameObject;
-                if (local.GetComponent<PlayerLife>().isImposter.Value) {
+                if (local.GetComponent<PlayerLife>().isImposterNetVar.Value) {
                     if (newValue) {
                         GetComponent<PlayerStuff>().playerNameTMP.color = Color.red;
                     }

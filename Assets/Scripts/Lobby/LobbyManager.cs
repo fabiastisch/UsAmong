@@ -180,7 +180,7 @@ public class LobbyManager : NetworkBehaviour {
         foreach (NetworkClient imposter in imposters) {
             if (imposter.PlayerObject) {
                 PlayerLife playerLife = imposter.PlayerObject.GetComponent<PlayerLife>();
-                playerLife.isImposter.Value = true;
+                playerLife.isImposterNetVar.Value = true;
             }
             else {
                 Debug.LogError("[LobbyManager:SetImposters]: no PlayerObject");

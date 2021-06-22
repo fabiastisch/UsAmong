@@ -27,7 +27,7 @@ namespace Player {
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q)) {
+            if (Input.GetKeyDown(KeyCode.Q) && GetComponent<PlayerLife>().isImposterNetVar.Value) {
                 // Kill Imposter Only
 
                 Collider2D[] colliders = CheckSorroundingArea();
