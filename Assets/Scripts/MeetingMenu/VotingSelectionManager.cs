@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
@@ -104,29 +103,23 @@ public class VotingSelectionManager : NetworkBehaviour {
             Debug.Log("[VotingSelectionManager] : Niemand wurde rausgevotet.");
             resultMessage = "Keine eindeutige Entscheidung ";
         }
-        
-        VotingSelection.Instance.ShowResultClientRpc(resultMessage);
 
-        
         selectionList.Clear();
-        
-        AfterConsultationEvaluationClientRpc();
 
+        ShowResultClientRpc(resultMessage);
     }
+    
+
     [ClientRpc]
-    public void AfterConsultationEvaluationClientRpc() {
-        CanvasLogic.Instance.StopCountdown();
+    public void ShowResultClientRpc(string resultMessage) {
+        VotingSelection.Instance.ShowResultClient(resultMessage);
     }
 
-    public void ExecutePlayer(string electedToDie)
-    {
-        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-        {
-            if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString())
-            {
+    public void ExecutePlayer(string electedToDie) {
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
+            if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString()) {
                 client.PlayerObject.GetComponent<PlayerStuff>().DestroyMeServerRpc();
             }
         }
     }
 }
-     

@@ -16,13 +16,12 @@ public class VotingSelection : MonoBehaviour {
     public GameObject parent;
     public TMP_Text canvasText;
 
-    public NetworkList<string> selectionList = new NetworkList<string>(new NetworkVariableSettings()
-    {
+    public NetworkList<string> selectionList = new NetworkList<string>(new NetworkVariableSettings() {
         ReadPermission = NetworkVariablePermission.Everyone,
         WritePermission = NetworkVariablePermission.Everyone,
         SendTickrate = 5
     }, new List<string>());
-    
+
     #region SingletonPattern
 
     private static VotingSelection instance;
@@ -45,7 +44,7 @@ public class VotingSelection : MonoBehaviour {
     }
 
     #endregion
-    
+
     private void OnEnable() {
         Debug.Log("[ImposterSelection] On Enable");
         PlayerSelectionUpdate();
@@ -60,7 +59,7 @@ public class VotingSelection : MonoBehaviour {
         }
 
         foreach (string player in VotingSelectionManager.Instance.GetPlayers()) {
-            GameObject newButton = Instantiate(newButtonPrefab, buttonPosition, Quaternion.identity,parent.transform);
+            GameObject newButton = Instantiate(newButtonPrefab, buttonPosition, Quaternion.identity, parent.transform);
             //newButton.transform.position = position;
             //newButton.transform.SetParent(parent.transform);
 
@@ -68,6 +67,7 @@ public class VotingSelection : MonoBehaviour {
             if (newButton.transform.childCount < 1) {
                 Debug.LogError("[ImposterSelection]: Button ChildCount < 1. Should contain Text");
             }
+
             TMP_Text text = newButton.transform.GetChild(0).GetComponent<TMP_Text>();
             text.text = player;
             Button tempButton = newButton.GetComponent<Button>();
@@ -84,23 +84,9 @@ public class VotingSelection : MonoBehaviour {
         VotingSelectionManager.Instance.selectionList.Add(playerName);
     }
 
-    [ClientRpc]
-    public void ShowResultClientRpc(string resultMessage)
-    {
+    public void ShowResultClient(string resultMessage) {
         canvasText.text = resultMessage;
         CanvasLogic.Instance.StopVoting();
-        CanvasLogic.Instance.StartShowingResult();
-        Invoke(nameof(InvokeStopShowingResult), 4);
     }
 
-    public void InvokeStopShowingResult()
-    {
-        CanvasLogic.Instance.StopShowingResult();
-    }
-
-
-    
-    
-    
-  
 }

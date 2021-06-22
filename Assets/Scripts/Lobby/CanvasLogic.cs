@@ -26,7 +26,7 @@ namespace Lobby {
         }
 
         #endregion
-        
+
         public Transform start;
 
         public GameObject startButton;
@@ -39,7 +39,7 @@ namespace Lobby {
 
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
-        
+
 
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
@@ -54,28 +54,27 @@ namespace Lobby {
 
         public void StartVoting() {
             votingObj.SetActive(true);
-        }
-        
-        public void StopVoting() {
-            votingObj.SetActive(false);
-        }
-        
-        public void StartShowingResult()
-        { 
-            votingResultObj.SetActive(true);
-        }
-        
-        public void StopShowingResult()
-        { 
-            votingResultObj.SetActive(false);
             StartCountdown(20); // TODO: always update Countdown with voting time 
         }
 
+        public void StopVoting() {
+            votingObj.SetActive(false);
+            votingResultObj.SetActive(true);
+            StopCountdown();
+            Invoke(nameof(StopShowingResult), 4);
+        }
+
+        public void StopShowingResult() {
+            votingResultObj.SetActive(false);
+        }
+
         public void StartCountdown(int coundowntime) {
-            SetStartButtonActive(false);
+            countdownObj.SetActive(true);
+            if (startButton.activeSelf) {
+                SetStartButtonActive(false);
+            }
             countDownTimeLeft = coundowntime;
             isCountDownActive = true;
-            countdownObj.SetActive(true);
         }
 
         public void StopCountdown() {
@@ -86,7 +85,7 @@ namespace Lobby {
         private void Update() {
             if (isCountDownActive) {
                 countDownTimeLeft -= Time.deltaTime;
-                countdownObj.GetComponent<TMP_Text>().text = ((int)countDownTimeLeft % 60 + 1).ToString();   
+                countdownObj.GetComponent<TMP_Text>().text = ((int) countDownTimeLeft % 60 + 1).ToString();
             }
         }
     }
