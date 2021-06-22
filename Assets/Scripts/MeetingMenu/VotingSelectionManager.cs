@@ -44,14 +44,6 @@ public class VotingSelectionManager : NetworkBehaviour {
         SendTickrate = 5
     }, new List<string>());
 
-    // Start is called before the first frame update
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update() {
-    }
-
     public IEnumerable<string> GetPlayers() {
         return this.playerList;
     }
@@ -100,42 +92,41 @@ public class VotingSelectionManager : NetworkBehaviour {
             }
         }
 
+
+        String resultMessage;
+
         if (electedToDie.Count == 1) {
             Debug.Log("[VotingSelectionManager] : " + electedToDie[0].ToString() + " wurde rausgevotet.");
+            ExecutePlayer(electedToDie[0].ToString());
+            resultMessage = electedToDie[0].ToString() + " wurde rausgevotet.";
         }
         else {
             Debug.Log("[VotingSelectionManager] : Niemand wurde rausgevotet.");
+            resultMessage = "Keine eindeutige Entscheidung ";
         }
+        
+        VotingSelection.Instance.ShowResultClientRpc(resultMessage);
 
-
+        
         selectionList.Clear();
         
         AfterConsultationEvaluationClientRpc();
 
-        //EveluateConsultationClientRpc(selectionResult);
     }
-
     [ClientRpc]
     public void AfterConsultationEvaluationClientRpc() {
         CanvasLogic.Instance.StopCountdown();
     }
 
-    /*
-    [ClientRpc]
-    public void EveluateConsultationClientRpc(Dictionary<string, int> selectIonResult) {
-        ArrayList electedToDie = new ArrayList();
-        foreach (var player in selectIonResult.Keys) {
-            Debug.Log(player + ": " + selectIonResult[player]);
-
-            if (electedToDie.Count != 0 && selectIonResult[player] > selectIonResult[electedToDie[0].ToString()]) {
-                electedToDie = new ArrayList();
-                electedToDie.Add(player);
-            }
-            else if (electedToDie.Count != 0 && selectIonResult[player] == selectIonResult[electedToDie[0].ToString()]) {
-                electedToDie.Add(player);
+    public void ExecutePlayer(string electedToDie)
+    {
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString())
+            {
+                client.PlayerObject.GetComponent<PlayerStuff>().DestroyMeServerRpc();
             }
         }
-
-        ImposterSelection.Instance.DetermineResult(electedToDie);
-    }*/
+    }
 }
+     
