@@ -28,6 +28,9 @@ public class LobbyManager : NetworkBehaviour {
         SendTickrate = 5
     }, new List<string>());
 
+    /**
+     * Server only
+     */
     public int impostersCount { get; private set; }
 
     /**
