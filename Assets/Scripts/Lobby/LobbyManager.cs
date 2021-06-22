@@ -180,9 +180,6 @@ public class LobbyManager : NetworkBehaviour {
 
         this.impostersCount = imposters.Count;
         
-
-        Debug.Log("[SetImposters]: imposter: " +imposters.Count + "imposter: " + imposters[0].PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-        Debug.Log("[SetImposters]: playerlist: " +playerList.Count);
         
         foreach (NetworkClient imposter in imposters) {
             if (imposter.PlayerObject) {

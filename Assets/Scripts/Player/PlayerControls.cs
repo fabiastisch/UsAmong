@@ -4,6 +4,7 @@ using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
 using UnityEngine;
+using UnityEngine.Analytics;
 using Utils;
 
 namespace Player {
@@ -27,70 +28,21 @@ namespace Player {
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Q) && GetComponent<PlayerLife>().isImposterNetVar.Value) {
-                // Kill Imposter Only
+            CheckForReport();
+            
+            // if imposter
+            if (GetComponent<PlayerLife>().isImposterNetVar.Value) {
+                CheckForKill();
 
-                Collider2D[] colliders = CheckSorroundingArea();
-
-                foreach (Collider2D playerCollider in colliders) {
-                    GameObject otherPlayer = playerCollider.transform.parent.gameObject;
-                    if (!CheckForPlayer(otherPlayer)) {
-                        continue;
-                    }
-
-                    if (!otherPlayer.Equals(gameObject)) {
-                        PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
-                        if (otherPlayerLife) {
-                            if (!otherPlayerLife.isAliveNetVar.Value) {
-                                Debug.Log("[ON KILL] Other Player isn't Alive");
-                                break;
-                            }
-
-                            otherPlayerLife.Kill();
-                        }
-                        else {
-                            Debug.LogWarning("[ON KILL] OtherPlayerLife is null? " + otherPlayerLife);
-                        }
-
-                        break;
-                    }
-                }
-
-                if (colliders.Length > 1) {
-                    Debug.Log("[ON KILL]: " + colliders[1].gameObject.transform.parent.gameObject);
+                if (Input.GetKeyDown(KeyCode.Q)) {
+                    // Kill Imposter Only
+                    PerformKill();
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.R)) {
                 // Report
-                Collider2D[] colliders = CheckSorroundingArea();
-
-                foreach (Collider2D playerCollider in colliders) {
-                    GameObject otherPlayer = playerCollider.transform.parent.gameObject;
-
-                    if (!CheckForPlayer(otherPlayer)) {
-                        continue;
-                    }
-
-                    if (!otherPlayer.Equals(gameObject)) {
-                        PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
-                        if (otherPlayerLife) {
-                            if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
-                                // otherPlayerLife.isReported = true;
-                                Debug.Log("[ON REPORT] report player: " + otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-                                otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
-                                
-                                VotingSelectionManager.Instance.SetPlayerServerRPC();
-                                Invoke(nameof(StartConsultationServerRpc),1);
-                                Invoke(nameof(StartEveluateConsultation), 21); // TODO: always check CanvasLogic:StartVoting countdown time
-                                break;
-                            }
-                            else {
-                                Debug.Log("[ON REPORT] isAlive or Reported");
-                            }
-                        }
-                    }
-                }
+                PerformReport();
             }
 
             if (Input.GetKeyDown(KeyCode.Tab)) {
@@ -99,6 +51,136 @@ namespace Player {
             if (Input.GetKeyDown(KeyCode.E)) {
                 // Use
             }
+        }
+
+        public void PerformReport() {
+            Collider2D[] colliders = CheckSorroundingArea();
+
+            foreach (Collider2D playerCollider in colliders) {
+                GameObject otherPlayer = playerCollider.transform.parent.gameObject;
+
+                if (!CheckForPlayer(otherPlayer)) {
+                    continue;
+                }
+
+                if (!otherPlayer.Equals(gameObject)) {
+                    PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
+                    if (otherPlayerLife) {
+                        if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
+                            // otherPlayerLife.isReported = true;
+                            Debug.Log("[ON REPORT] report player: " + otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
+                            otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
+
+                            VotingSelectionManager.Instance.SetPlayerServerRPC();
+                            Invoke(nameof(StartConsultationServerRpc), 1);
+                            Invoke(nameof(StartEveluateConsultation),
+                                21); // TODO: always check CanvasLogic:StartVoting countdown time
+                            break;
+                        }
+                        else {
+                            Debug.Log("[ON REPORT] isAlive or Reported");
+                        }
+                    }
+                }
+            }
+        }
+
+        public void PerformKill() {
+            if (!GetComponent<PlayerLife>().isImposterNetVar.Value) {
+                return;
+            }
+            Collider2D[] colliders = CheckSorroundingArea();
+
+            foreach (Collider2D playerCollider in colliders) {
+                GameObject otherPlayer = playerCollider.transform.parent.gameObject;
+                if (!CheckForPlayer(otherPlayer)) {
+                    continue;
+                }
+
+                if (!otherPlayer.Equals(gameObject)) {
+                    PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
+                    if (otherPlayerLife) {
+                        if (!otherPlayerLife.isAliveNetVar.Value) {
+                            Debug.Log("[ON KILL] Other Player isn't Alive");
+                            break;
+                        }
+
+                        otherPlayerLife.Kill();
+                    }
+                    else {
+                        Debug.LogWarning("[ON KILL] OtherPlayerLife is null? " + otherPlayerLife);
+                    }
+
+                    break;
+                }
+            }
+
+            if (colliders.Length > 1) {
+                Debug.Log("[ON KILL]: " + colliders[1].gameObject.transform.parent.gameObject);
+            }
+        }
+
+        private void CheckForKill() {
+            // Kill Imposter Only
+            bool couldKill = false;
+
+
+            Collider2D[] colliders = CheckSorroundingArea();
+
+            foreach (Collider2D playerCollider in colliders) {
+                GameObject otherPlayer = playerCollider.transform.parent.gameObject;
+                if (!CheckForPlayer(otherPlayer)) {
+                    continue;
+                }
+
+                if (!otherPlayer.Equals(gameObject)) {
+                    PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
+                    if (otherPlayerLife) {
+                        if (!otherPlayerLife.isAliveNetVar.Value) {
+                            break;
+                        }
+
+                        couldKill = true;
+                        //otherPlayerLife.Kill();
+                    }
+                    else {
+                        Debug.LogWarning("[ON KILL] OtherPlayerLife is null? " + otherPlayerLife);
+                    }
+
+                    break;
+                }
+            }
+
+            CanvasLogic.Instance.HighlightKillButton(couldKill);
+        }
+
+        private void CheckForReport() {
+            // Report
+            Collider2D[] colliders = CheckSorroundingArea();
+
+            bool couldReport = false;
+
+            foreach (Collider2D playerCollider in colliders) {
+                GameObject otherPlayer = playerCollider.transform.parent.gameObject;
+
+                if (!CheckForPlayer(otherPlayer)) {
+                    continue;
+                }
+
+                if (!otherPlayer.Equals(gameObject)) {
+                    PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
+                    if (otherPlayerLife) {
+                        if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
+                            // otherPlayerLife.isReported = true;
+                            // Could report
+                            couldReport = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            CanvasLogic.Instance.HighlightReportButton(couldReport);
         }
 
         private void StartEveluateConsultation() {
@@ -140,7 +222,7 @@ namespace Player {
                 Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                 localPlayer.transform.position = consultationPosition;
             }
-            
+
             CanvasLogic.Instance.StartVoting();
         }
 

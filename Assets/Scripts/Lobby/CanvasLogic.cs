@@ -1,6 +1,10 @@
 ﻿using System;
+using MLAPI;
+using Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using Utils;
 
 namespace Lobby {
     public class CanvasLogic : MonoBehaviour {
@@ -37,9 +41,44 @@ namespace Lobby {
 
         public GameObject countdownObj;
 
+        public GameObject killBtnObj;
+        public GameObject reportBtnObj;
+
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
+        
+        private void Start() {
+            killBtnObj.GetComponent<Button>().onClick.AddListener(() => {
+                NetUtils.GetLocalObject().GetComponent<PlayerControls>().PerformKill();
+            });
+            reportBtnObj.GetComponent<Button>().onClick.AddListener(() => {
+                NetUtils.GetLocalObject().GetComponent<PlayerControls>().PerformReport();
+            });
+            NetworkObject networkObject = NetUtils.GetLocalObject();
+            if (!networkObject) {
+                return;
+            }
+            networkObject.GetComponent<PlayerLife>().isAliveNetVar.OnValueChanged += (value, newValue) => {
+                if (!newValue) {
+                    if (killBtnObj.activeSelf) {
+                        killBtnObj.SetActive(false);
+                    }
 
+                    if (reportBtnObj.activeSelf) {
+                        reportBtnObj.SetActive(false);
+                    }
+                }
+                else {
+                    if (!killBtnObj.activeSelf) {
+                        killBtnObj.SetActive(true);
+                    }
+
+                    if (!reportBtnObj.activeSelf) {
+                        reportBtnObj.SetActive(true);
+                    }
+                }
+            };
+        }
 
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
@@ -73,6 +112,7 @@ namespace Lobby {
             if (startButton.activeSelf) {
                 SetStartButtonActive(false);
             }
+
             countDownTimeLeft = coundowntime;
             isCountDownActive = true;
         }
@@ -86,6 +126,32 @@ namespace Lobby {
             if (isCountDownActive) {
                 countDownTimeLeft -= Time.deltaTime;
                 countdownObj.GetComponent<TMP_Text>().text = ((int) countDownTimeLeft % 60 + 1).ToString();
+            }
+        }
+
+        public void HighlightKillButton(bool status) {
+            if (status) {
+                var tmpColor = new Color(255, 255, 255);
+                tmpColor.a = 1f;
+                killBtnObj.GetComponent<Image>().color = tmpColor;
+            }
+            else {
+                var tmpColor = new Color(128, 128, 128);
+                tmpColor.a = 0.5f;
+                killBtnObj.GetComponent<Image>().color = tmpColor;
+            }
+        }
+
+        public void HighlightReportButton(bool status) {
+            if (status) {
+                var tmpColor = new Color(255, 255, 255);
+                tmpColor.a = 1f;
+                reportBtnObj.GetComponent<Image>().color = tmpColor;
+            }
+            else {
+                var tmpColor = new Color(128, 128, 128);
+                tmpColor.a = 0.5f;
+                reportBtnObj.GetComponent<Image>().color = tmpColor;
             }
         }
     }

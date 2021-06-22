@@ -31,6 +31,9 @@ namespace Utils {
         public static ulong LocalClientId => NetworkManager.Singleton.LocalClientId;
 
         public static NetworkObject GetLocalObject() {
+            if (!IsConnected()) {
+                return null;
+            }
             return NetworkSpawnManager.GetLocalPlayerObject();
         }
     }
