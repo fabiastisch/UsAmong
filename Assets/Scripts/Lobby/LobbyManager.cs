@@ -28,6 +28,7 @@ public class LobbyManager : NetworkBehaviour {
         SendTickrate = 5
     }, new List<string>());
 
+    public int impostersCount { get; private set; }
 
     /**
      * Event get's invoke, after Local Player was Spawned.
@@ -61,6 +62,7 @@ public class LobbyManager : NetworkBehaviour {
      * On Server
      */
     private Vector3 startGamePos;
+
 
     // Start is called before the first frame update
     void Start() {
@@ -172,6 +174,8 @@ public class LobbyManager : NetworkBehaviour {
             playerList.RemoveAt(random);
             //playerList.Remove(playerList[random]);
         }
+
+        this.impostersCount = imposters.Count;
         
 
         Debug.Log("[SetImposters]: imposter: " +imposters.Count + "imposter: " + imposters[0].PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
