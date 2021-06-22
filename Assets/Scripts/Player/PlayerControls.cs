@@ -142,7 +142,6 @@ namespace Player {
             }
             
             CanvasLogic.Instance.StartVoting();
-            /*MainMenu.ActivateImposterSelection();*/
         }
 
         public GameObject getLocalPlayer() {

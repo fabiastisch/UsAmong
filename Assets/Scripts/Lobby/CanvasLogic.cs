@@ -33,6 +33,8 @@ namespace Lobby {
 
         public GameObject votingObj;
 
+        public GameObject votingResultObj;
+
         public GameObject countdownObj;
 
         private float countDownTimeLeft = 0f;
@@ -52,7 +54,20 @@ namespace Lobby {
 
         public void StartVoting() {
             votingObj.SetActive(true);
-
+        }
+        
+        public void StopVoting() {
+            votingObj.SetActive(false);
+        }
+        
+        public void StartShowingResult()
+        { 
+            votingResultObj.SetActive(true);
+        }
+        
+        public void StopShowingResult()
+        { 
+            votingResultObj.SetActive(false);
         }
 
         public void StartCountdown(int coundowntime) {

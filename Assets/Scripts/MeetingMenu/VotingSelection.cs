@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lobby;
+using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 using Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class VotingSelection : MonoBehaviour {
     public GameObject newButtonPrefab;
     public GameObject parent;
+    public TMP_Text canvasText;
 
     public NetworkList<string> selectionList = new NetworkList<string>(new NetworkVariableSettings()
     {
@@ -41,11 +45,6 @@ public class VotingSelection : MonoBehaviour {
     }
 
     #endregion
-
-    // Start is called before the first frame update
-    void Start() {
-       
-    }
     
     private void OnEnable() {
         Debug.Log("[ImposterSelection] On Enable");
@@ -70,7 +69,6 @@ public class VotingSelection : MonoBehaviour {
                 Debug.LogError("[ImposterSelection]: Button ChildCount < 1. Should contain Text");
             }
             TMP_Text text = newButton.transform.GetChild(0).GetComponent<TMP_Text>();
-            Debug.Log(text);
             text.text = player;
             Button tempButton = newButton.GetComponent<Button>();
             tempButton.onClick.AddListener(() => MakeSelection(player));
@@ -86,31 +84,23 @@ public class VotingSelection : MonoBehaviour {
         VotingSelectionManager.Instance.selectionList.Add(playerName);
     }
 
+    [ClientRpc]
+    public void ShowResultClientRpc(string resultMessage)
+    {
+        canvasText.text = resultMessage;
+        CanvasLogic.Instance.StopVoting();
+        CanvasLogic.Instance.StartShowingResult();
+        Invoke(nameof(InvokeStopShowingResult), 4);
+    }
+
+    public void InvokeStopShowingResult()
+    {
+        CanvasLogic.Instance.StopShowingResult();
+    }
+
 
     
-
-    public void DetermineResult(ArrayList deathList) {
-        Text text = parent.AddComponent<Text>();
-        switch (deathList.Count) {
-            case 0:
-                Debug.Log("Kein Spieler wurde gewählt");
-                text.text = "Kein Spieler wurde gewählt";
-                break;
-            case 1:
-                Debug.Log("Ein Spieler wurde gewählt");
-                //ExecutePlayer(deathList[0].ToString());
-                break;
-            default:
-                Debug.Log("Es wurde keine Einigung getroffen. Mehrere Spieler haben die gleiche Punktzahl");
-                break;
-        }
-        /*
-        MainMenu.ActivateImposterSelection();
-        */
-    }
-
-    private void ExecutePlayer(string playerName) {
-        GameObject player = GameObject.Find(playerName);
-        player.GetComponent<PlayerStuff>().DestroyMeServerRpc();
-    }
+    
+    
+  
 }
