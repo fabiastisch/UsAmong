@@ -45,6 +45,9 @@ namespace Lobby {
             Debug.Log("Start Button CLICKED");
             //SceneLoaderManager.LoadGame();
             LobbyManager.Singleton.StartGameServerRpc(start.position);
+            CoinManager coinmanager = CoinManager.Instance;
+            coinmanager.SetPlayerServerRPC();
+            coinmanager.DetermineNumberOfCoinsServerRPC();
             //LobbyManager.Singleton.getLocalPlayer().transform.position = start.position;
         }
 
