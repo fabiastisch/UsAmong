@@ -67,10 +67,11 @@ public class CoinManager : NetworkBehaviour
             playerList.Add(name);
         }
     }
-    public void minimizeRemainingCoins()
+    public void minimizeRemainingCoins(GameObject o)
     {
         remainingCoinsNetVar.Value -= 1;
         Debug.Log("[" + nameof(minimizeRemainingCoins) + "]" + remainingCoinsNetVar.Value);
+        Destroy(o);
     }
     
     [ClientRpc]
@@ -79,7 +80,6 @@ public class CoinManager : NetworkBehaviour
         {
             Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
             GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
-            coin.AddComponent<Coin>();
         }
     }
     
@@ -88,10 +88,4 @@ public class CoinManager : NetworkBehaviour
         return this.playerList;
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -199,7 +199,7 @@ namespace Player {
         private Collider2D[] CheckSorroundingArea() {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), killRadius,
                 LayerMask.GetMask("Player"));
-            Debug.Log("[CheckSorroundingArea] Collider size: " + colliders.Length);
+            //Debug.Log("[CheckSorroundingArea] Collider size: " + colliders.Length);
             Array.Sort(colliders,
                 (collider1, collider2) => (int) (UtilsUnity.getDistanceBetweenGameObjects(collider1.gameObject, gameObject) -
                                                  UtilsUnity.getDistanceBetweenGameObjects(collider2.gameObject, gameObject)));
