@@ -137,17 +137,62 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void StartGameServerRpc(Vector3 startGamePos) {
-        this.startGamePos = startGamePos;
+    public void StartGameServerRpc(Vector3 startGamePosPara) {
+        
+        this.startGamePos = startGamePosPara;
         int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
+        SetImposters();
+        Debug.Log("[AfterImpSelection]");
         Invoke(nameof(StartGame), coundowntime);
+    }
+
+    /**
+     * Called on Server
+     */
+    public void SetImposters() {
+        NetworkClient[] networkClients = new NetworkClient[NetworkManager.Singleton.ConnectedClientsList.Count];
+        NetworkManager.Singleton.ConnectedClientsList.CopyTo(networkClients);
+        List<NetworkClient> playerList = networkClients.ToList();
+        
+
+        var imposters = new List<NetworkClient>();
+        if (playerList.Count > 3) {
+            // 2 Imposter
+            for (int i = 0; i < 2; i++) {
+                int random = UtilsUnity.GetRandomInt(playerList.Count - 1);
+                imposters.Add(playerList[random]);
+                playerList.RemoveAt(random);
+            }
+            
+        }else if (playerList.Count > 1) {
+            // 1 Imposter
+            int random = UtilsUnity.GetRandomInt(playerList.Count - 1);
+            imposters.Add(playerList[random]);
+            playerList.RemoveAt(random);
+            //playerList.Remove(playerList[random]);
+        }
+        
+
+        Debug.Log("[SetImposters]: imposter: " +imposters.Count + "imposter: " + imposters[0].PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
+        Debug.Log("[SetImposters]: playerlist: " +playerList.Count);
+        
+        foreach (NetworkClient imposter in imposters) {
+            if (imposter.PlayerObject) {
+                PlayerLife playerLife = imposter.PlayerObject.GetComponent<PlayerLife>();
+                playerLife.isImposter.Value = true;
+            }
+            else {
+                Debug.LogError("[LobbyManager:SetImposters]: no PlayerObject");
+            }
+        }
     }
 
     /**
      * On Server to call ClientRpc
      */
     private void StartGame() {
+        Debug.Log("[StartGame]");
         StartGameClientRpc(startGamePos);
     }
 
@@ -157,11 +202,13 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void StartGameClientRpc(Vector3 startGamePos) {
+    public void StartGameClientRpc(Vector3 startGamePosition) {
+        Debug.Log("[StartGameClientRpc]");
         CanvasLogic.Instance.StopCountdown();
         GameObject localPlayer = this.getLocalPlayer();
+        Debug.Log("Got local Player: " + localPlayer);
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-        localPlayer.transform.position = startGamePos;
+        localPlayer.transform.position = startGamePosition;
         // startGamePos += new Vector3(2f, 0);
     }
 
@@ -173,6 +220,5 @@ public class LobbyManager : NetworkBehaviour {
 
     public GameObject getLocalPlayer() {
         return NetworkSpawnManager.GetLocalPlayerObject().gameObject;
-        ;
     }
 }

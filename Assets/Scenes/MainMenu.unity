@@ -2271,7 +2271,7 @@ MonoBehaviour:
       PlayerPrefab: 0
     - Prefab: {fileID: 7429244285843028255, guid: 5263c58a6595b5d4ab9574fee866ea81,
         type: 3}
-      PlayerPrefab: 1
+      PlayerPrefab: 0
     - Prefab: {fileID: 1618007245889331935, guid: a31de8abb9cb23e4bb140a16cf4f97d9,
         type: 3}
       PlayerPrefab: 0
@@ -2295,7 +2295,7 @@ MonoBehaviour:
     EnableSceneManagement: 0
     ForceSamePrefabs: 1
     UsePrefabSync: 0
-    RecycleNetworkIds: 1
+    RecycleNetworkIds: 0
     NetworkIdRecycleDelay: 120
     RpcHashSize: 0
     LoadSceneTimeOut: 120
@@ -2307,7 +2307,7 @@ MonoBehaviour:
     00000000:
       type: {class: NullableBoolSerializable, ns: MLAPI.Configuration, asm: Unity.Multiplayer.MLAPI.Runtime}
       data:
-        Value: 732915202479287707
+        Value: 1897319656204293034
 --- !u!4 &1256578091
 Transform:
   m_ObjectHideFlags: 0

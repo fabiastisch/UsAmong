@@ -1,5 +1,7 @@
 ﻿using MLAPI;
+using MLAPI.Connection;
 using MLAPI.NetworkVariable;
+using MLAPI.Spawning;
 using UnityEngine;
 
 namespace Utils {
@@ -27,5 +29,9 @@ namespace Utils {
         };
 
         public static ulong LocalClientId => NetworkManager.Singleton.LocalClientId;
+
+        public static NetworkObject GetLocalObject() {
+            return NetworkSpawnManager.GetLocalPlayerObject();
+        }
     }
 }
