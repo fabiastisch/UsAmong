@@ -66,6 +66,7 @@ MonoBehaviour:
     type: 3}
   remainingCoinsNetVar:
     m_InternalValue: 0
+  canvas: {fileID: 3790074278763055808, guid: 5190402970687491faeb40290ef54b4d, type: 3}
 --- !u!114 &7729954220725767555
 MonoBehaviour:
   m_ObjectHideFlags: 0

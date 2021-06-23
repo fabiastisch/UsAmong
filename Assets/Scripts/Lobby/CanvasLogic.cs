@@ -41,6 +41,10 @@ namespace Lobby {
 
         public GameObject countdownObj;
 
+        public GameObject playerWinScreen;
+        public GameObject imposterWinScreen;
+
+
         public GameObject killBtnObj;
         public GameObject reportBtnObj;
 
@@ -104,6 +108,28 @@ namespace Lobby {
             votingResultObj.SetActive(true);
             StopCountdown();
             Invoke(nameof(StopShowingResult), 4);
+        }
+
+        public void StartPlayerWinScreen()
+        {
+            imposterWinScreen.SetActive(true);
+            Invoke(nameof(StopPlayerWinScreen), 10);
+        }
+        
+        public void StopPlayerWinScreen()
+        {
+            imposterWinScreen.SetActive(true);
+        }
+        
+        public void StartImposterWinScreen()
+        {
+            imposterWinScreen.SetActive(true);
+            Invoke(nameof(StopImposterWinScreen), 10);
+        }
+        
+        public void StopImposterWinScreen()
+        {
+            imposterWinScreen.SetActive(false);
         }
 
         public void StopShowingResult() {

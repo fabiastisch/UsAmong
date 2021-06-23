@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 using Player;
+using TMPro;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
@@ -39,22 +41,53 @@ public class CoinManager : NetworkBehaviour
     #endregion
 
     public GameObject coinObject;
-    private int coinsPerPlayer = 100;
+    private int coinsPerPlayer = 2;
     public NetworkVariableInt remainingCoinsNetVar = new NetworkVariableInt(NetUtils.Everyone, 0);
-    
+    public Canvas canvas;
     public NetworkList<string> playerList = new NetworkList<string>(NetUtils.Everyone);
+    private Canvas canvasobject;
+    private TMP_Text text;
 
+        // Start is called before the first frame update
 
-    // Start is called before the first frame update
-
+    public void Start()
+    {
+        canvasobject = Instantiate(canvas, new Vector3(0,0,0), Quaternion.identity);
+        text = canvasobject.transform.GetChild(0).GetComponent<TMP_Text>();
+    }
+    
+    public void Update()
+    {
+        text.text = "Coins to Collect: " + remainingCoinsNetVar.Value;;
+    }
 
     [ServerRpc(RequireOwnership = false)]
     public void DetermineNumberOfCoinsServerRPC()
     {
         remainingCoinsNetVar.Value = GetPlayers().Count() * coinsPerPlayer;
-        Debug.Log(remainingCoinsNetVar.Value);
-        SpawnCoinsClientRPC();
+        SpawnElementsClientRPC();
     }
+    
+    public void minimizeRemainingCoins(GameObject o)
+    {
+        remainingCoinsNetVar.Value -= 1;
+        if (remainingCoinsNetVar.Value == 0)
+        {
+            CanvasLogic.Instance.StartPlayerWinScreen();
+        }
+        Destroy(o);
+    }
+    
+    [ClientRpc]
+    public void SpawnElementsClientRPC() 
+    {
+        for (int i = 0; i < coinsPerPlayer; i++)
+        {
+            Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
+            GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
+        }
+    }
+    
     
     [ServerRpc(RequireOwnership = false)]
     public void SetPlayerServerRPC() {
@@ -67,22 +100,6 @@ public class CoinManager : NetworkBehaviour
             playerList.Add(name);
         }
     }
-    public void minimizeRemainingCoins(GameObject o)
-    {
-        remainingCoinsNetVar.Value -= 1;
-        Debug.Log("[" + nameof(minimizeRemainingCoins) + "]" + remainingCoinsNetVar.Value);
-        Destroy(o);
-    }
-    
-    [ClientRpc]
-    public void SpawnCoinsClientRPC() {
-        for (int i = 0; i < coinsPerPlayer; i++)
-        {
-            Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
-            GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
-        }
-    }
-    
     
     public IEnumerable<string> GetPlayers() {
         return this.playerList;
