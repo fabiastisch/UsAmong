@@ -116,12 +116,12 @@ namespace Lobby {
         }
 
         public void StartPlayerWinScreen() {
-            imposterWinScreen.SetActive(true);
+            playerWinScreen.SetActive(true);
             Invoke(nameof(StopPlayerWinScreen), 10);
         }
 
         public void StopPlayerWinScreen() {
-            imposterWinScreen.SetActive(true);
+            playerWinScreen.SetActive(false);
         }
 
         public void StartImposterWinScreen() {
