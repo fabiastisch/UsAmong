@@ -44,13 +44,15 @@ namespace Lobby {
         public GameObject playerWinScreen;
         public GameObject imposterWinScreen;
 
+        public GameObject youreImpOrCrewMateScreen;
+        public GameObject fullScreenOverlay;
 
         public GameObject killBtnObj;
         public GameObject reportBtnObj;
 
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
-        
+
         private void Start() {
             killBtnObj.GetComponent<Button>().onClick.AddListener(() => {
                 NetUtils.GetLocalObject().GetComponent<PlayerControls>().PerformKill();
@@ -62,6 +64,7 @@ namespace Lobby {
             if (!networkObject) {
                 return;
             }
+
             networkObject.GetComponent<PlayerLife>().isAliveNetVar.OnValueChanged += (value, newValue) => {
                 if (!newValue) {
                     if (killBtnObj.activeSelf) {
@@ -110,25 +113,21 @@ namespace Lobby {
             Invoke(nameof(StopShowingResult), 4);
         }
 
-        public void StartPlayerWinScreen()
-        {
+        public void StartPlayerWinScreen() {
             imposterWinScreen.SetActive(true);
             Invoke(nameof(StopPlayerWinScreen), 10);
         }
-        
-        public void StopPlayerWinScreen()
-        {
+
+        public void StopPlayerWinScreen() {
             imposterWinScreen.SetActive(true);
         }
-        
-        public void StartImposterWinScreen()
-        {
+
+        public void StartImposterWinScreen() {
             imposterWinScreen.SetActive(true);
             Invoke(nameof(StopImposterWinScreen), 10);
         }
-        
-        public void StopImposterWinScreen()
-        {
+
+        public void StopImposterWinScreen() {
             imposterWinScreen.SetActive(false);
         }
 
@@ -145,6 +144,27 @@ namespace Lobby {
             countDownTimeLeft = coundowntime;
             isCountDownActive = true;
         }
+
+        public void SetYoureImpOrCrewMate(float seconds) {
+            youreImpOrCrewMateScreen.SetActive(true);
+            SetFullScreenOverlay(true);
+            bool isImposter = NetUtils.GetLocalObject().GetComponent<PlayerLife>().isImposterNetVar.Value;
+            TMP_Text text = youreImpOrCrewMateScreen.GetComponent<TMP_Text>();
+            if (isImposter) {
+                text.text = "You are Imposter.";
+            }
+            else {
+                text.text = "You are Crewmate.";
+            }
+
+            Invoke(nameof(HideActiveYoureImpOrCrew), seconds);
+        }
+
+        private void HideActiveYoureImpOrCrew() {
+            youreImpOrCrewMateScreen.SetActive(false);
+            SetFullScreenOverlay(false);
+        }
+
 
         public void StopCountdown() {
             isCountDownActive = false;
@@ -171,8 +191,17 @@ namespace Lobby {
             }
         }
 
-        public void HighlightReportButton(bool status) {
-            if (status) {
+        private void SetFullScreenOverlay(bool active) {
+            fullScreenOverlay.SetActive(active);
+            if (!NetUtils.GetLocalObject().GetComponent<PlayerLife>().isImposterNetVar.Value) {
+                killBtnObj.SetActive(false);
+            }
+
+            reportBtnObj.SetActive(!active);
+        }
+
+        public void HighlightReportButton(bool active) {
+            if (active) {
                 var tmpColor = new Color(255, 255, 255);
                 tmpColor.a = 1f;
                 reportBtnObj.GetComponent<Image>().color = tmpColor;

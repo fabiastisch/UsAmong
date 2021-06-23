@@ -209,6 +209,7 @@ public class LobbyManager : NetworkBehaviour {
     public void StartGameClientRpc(Vector3 startGamePosition) {
         Debug.Log("[StartGameClientRpc]");
         CanvasLogic.Instance.StopCountdown();
+        CanvasLogic.Instance.SetYoureImpOrCrewMate(2);
         GameObject localPlayer = this.getLocalPlayer();
         Debug.Log("Got local Player: " + localPlayer);
         Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
