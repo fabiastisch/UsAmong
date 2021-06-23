@@ -53,12 +53,12 @@ public class CoinManager : NetworkBehaviour
     public void Start()
     {
         //canvasobject = Instantiate(canvas, new Vector3(0,0,0), Quaternion.identity);
-        //text = canvasobject.transform.GetChild(0).GetComponent<TMP_Text>();
+        text = CanvasLogic.Instance.coinCounterObj.GetComponent<TMP_Text>();
     }
     
     public void Update()
     {
-        //text.text = "Coins to Collect: " + remainingCoinsNetVar.Value;
+        text.text = "Coins to Collect: " + remainingCoinsNetVar.Value;
     }
 
     [ServerRpc(RequireOwnership = false)]

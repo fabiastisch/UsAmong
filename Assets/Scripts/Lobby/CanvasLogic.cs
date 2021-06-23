@@ -50,6 +50,8 @@ namespace Lobby {
         public GameObject killBtnObj;
         public GameObject reportBtnObj;
 
+        public GameObject coinCounterObj;
+
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
 
