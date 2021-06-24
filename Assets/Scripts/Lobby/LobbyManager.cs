@@ -27,12 +27,15 @@ public class LobbyManager : NetworkBehaviour {
         WritePermission = NetworkVariablePermission.Everyone,
         SendTickrate = 5
     }, new List<string>());
+    
+    public NetworkVariableInt livingCrewMates = new NetworkVariableInt(NetUtils.Everyone, 0);
+
 
     /**
      * Server only
      */
     public int impostersCount { get; private set; }
-
+    
     /**
      * Event get's invoke, after Local Player was Spawned.
      */
@@ -188,6 +191,21 @@ public class LobbyManager : NetworkBehaviour {
             }
             else {
                 Debug.LogError("[LobbyManager:SetImposters]: no PlayerObject");
+            }
+        }
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    public void DetermineNumberOfLivingCrewmatesServerRPC() {
+        Debug.Log("[LobbyManager] DetermineNumberOfLivingCrewmatesServerRPC");
+
+        livingCrewMates.Value = 0;
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            PlayerLife playerLife = client.PlayerObject.GetComponent<PlayerLife>();
+            if (playerLife.isAliveNetVar.Value && !playerLife.isImposterNetVar.Value)
+            {
+                livingCrewMates.Value++;
             }
         }
     }

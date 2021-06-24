@@ -1,5 +1,6 @@
 ﻿using System;
 using Lobby;
+using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

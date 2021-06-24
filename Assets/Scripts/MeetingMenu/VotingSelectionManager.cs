@@ -51,11 +51,13 @@ public class VotingSelectionManager : NetworkBehaviour {
     public void SetPlayerServerRPC() {
         Debug.Log("[VotingSelectionManager] SetPlayerServerRPC");
         playerList.Clear();
-        var nameList =
-            NetworkManager.Singleton.ConnectedClientsList.ConvertAll<string>(client =>
-                client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-        foreach (string name in nameList) {
-            playerList.Add(name);
+
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
+            if (client.PlayerObject.GetComponent<PlayerLife>().isAliveNetVar.Value)
+            {
+                playerList.Add(client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
+            }
         }
     }
 
@@ -118,7 +120,7 @@ public class VotingSelectionManager : NetworkBehaviour {
     public void ExecutePlayer(string electedToDie) {
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
             if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString()) {
-                client.PlayerObject.GetComponent<PlayerStuff>().DestroyMeServerRpc();
+                client.PlayerObject.GetComponent<PlayerLife>().Kill();
             }
         }
     }

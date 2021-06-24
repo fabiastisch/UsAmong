@@ -39,6 +39,12 @@ namespace Player {
             Debug.Log("[DestroyMeServerRPC]");
             //NetworkManager.Destroy(GetComponent<NetworkObject>());
             GetComponent<NetworkObject>().Despawn(true);
+            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
+        }
+        
+        public bool isLocalPlayer()
+        {
+            return this.IsLocalPlayer;
         }
     }
 }

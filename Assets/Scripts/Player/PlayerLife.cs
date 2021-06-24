@@ -29,7 +29,6 @@ namespace Player {
 
         public void Kill() {
             isAliveNetVar.Value = false;
-
             KillServerRPC(GetComponent<NetworkObject>().OwnerClientId);
         }
 
@@ -42,6 +41,8 @@ namespace Player {
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
             // instanceDeadBody.GetComponent<PlayerLife>().isAlive = false;
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
+            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
+            Debug.Log("[KillServerRPC]" + LobbyManager.Singleton.livingCrewMates.Value);
         }
     }
 }

@@ -39,20 +39,20 @@ public class CoinManager : NetworkBehaviour
     }
 
     #endregion
+    
+    public NetworkVariableInt remainingCoinsNetVar = new NetworkVariableInt(NetUtils.Everyone, 0);
+    
 
     public GameObject coinObject;
-    private int coinsPerPlayer = 2;
-    public NetworkVariableInt remainingCoinsNetVar = new NetworkVariableInt(NetUtils.Everyone, 0);
-    public Canvas canvas;
-    public NetworkList<string> playerList = new NetworkList<string>(NetUtils.Everyone);
-    private Canvas canvasobject;
     private TMP_Text text;
 
-        // Start is called before the first frame update
+    private int coinsPerPlayer = 20;
+    private bool isImposter;
+
+    // Start is called before the first frame update
 
     public void Start()
     {
-        //canvasobject = Instantiate(canvas, new Vector3(0,0,0), Quaternion.identity);
         text = CanvasLogic.Instance.coinCounterObj.GetComponent<TMP_Text>();
     }
     
@@ -64,45 +64,49 @@ public class CoinManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void DetermineNumberOfCoinsServerRPC()
     {
-        remainingCoinsNetVar.Value = GetPlayers().Count() * coinsPerPlayer;
-        SpawnElementsClientRPC();
+        Debug.Log(LobbyManager.Singleton.livingCrewMates.Value );
+        remainingCoinsNetVar.Value = LobbyManager.Singleton.livingCrewMates.Value * coinsPerPlayer;
+        SpawnNewCoinsClientRPC(coinsPerPlayer);
     }
     
-    public void minimizeRemainingCoins(GameObject o)
+    public void determineRemainingCoins(GameObject o, GameObject other)
     {
-        remainingCoinsNetVar.Value -= 1;
+        isImposter = other.GetComponent<PlayerLife>().isImposterNetVar.Value;
+        
+        if (isImposter)
+        {
+            int numberOfNewCoins = 10;
+            Debug.Log("[determineRemainingCoins]: " + LobbyManager.Singleton.livingCrewMates.Value);
+            remainingCoinsNetVar.Value =  remainingCoinsNetVar.Value + numberOfNewCoins * LobbyManager.Singleton.livingCrewMates.Value;
+            SpawnNewCoinsServerRpc(numberOfNewCoins);
+        }
+        else
+        {
+            remainingCoinsNetVar.Value -= 1;
+        }
         if (remainingCoinsNetVar.Value == 0)
         {
             CanvasLogic.Instance.StartPlayerWinScreen();
         }
         Destroy(o);
     }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void SpawnNewCoinsServerRpc(int numberOfNewCoins)
+    {
+        SpawnNewCoinsClientRPC(numberOfNewCoins);
+    }
     
     [ClientRpc]
-    public void SpawnElementsClientRPC() 
+    public void SpawnNewCoinsClientRPC(int amountOfCoins)
     {
-        for (int i = 0; i < coinsPerPlayer; i++)
+        if (!isImposter)
         {
-            Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
-            GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
+            for (int i = 0; i < amountOfCoins; i++)
+            {
+                Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
+                Instantiate(coinObject, random, Quaternion.identity);
+            } 
         }
     }
-    
-    
-    [ServerRpc(RequireOwnership = false)]
-    public void SetPlayerServerRPC() {
-        Debug.Log("[CoinManager] SetPlayerServerRPC");
-        playerList.Clear();
-        var nameList =
-            NetworkManager.Singleton.ConnectedClientsList.ConvertAll<string>(client =>
-                client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-        foreach (string name in nameList) {
-            playerList.Add(name);
-        }
-    }
-    
-    public IEnumerable<string> GetPlayers() {
-        return this.playerList;
-    }
-
 }

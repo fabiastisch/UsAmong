@@ -91,12 +91,11 @@ namespace Lobby {
 
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
-            //SceneLoaderManager.LoadGame();
             LobbyManager.Singleton.StartGameServerRpc(start.position);
+            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
+            Debug.Log(LobbyManager.Singleton.livingCrewMates);
             CoinManager coinmanager = CoinManager.Instance;
-            coinmanager.SetPlayerServerRPC();
             coinmanager.DetermineNumberOfCoinsServerRPC();
-            //LobbyManager.Singleton.getLocalPlayer().transform.position = start.position;
         }
 
         public void SetStartButtonActive(bool value) {
