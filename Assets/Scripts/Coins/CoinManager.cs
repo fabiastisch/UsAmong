@@ -71,24 +71,30 @@ public class CoinManager : NetworkBehaviour
     
     public void determineRemainingCoins(GameObject o, GameObject other)
     {
-        isImposter = other.GetComponent<PlayerLife>().isImposterNetVar.Value;
-        
-        if (isImposter)
+        if (other.GetComponent<PlayerStuff>().IsLocalPlayer)
         {
-            int numberOfNewCoins = 10;
-            Debug.Log("[determineRemainingCoins]: " + LobbyManager.Singleton.livingCrewMates.Value);
-            remainingCoinsNetVar.Value =  remainingCoinsNetVar.Value + numberOfNewCoins * LobbyManager.Singleton.livingCrewMates.Value;
-            SpawnNewCoinsServerRpc(numberOfNewCoins);
+            isImposter = other.GetComponent<PlayerLife>().isImposterNetVar.Value;
+
+            if (isImposter)
+            {
+                int numberOfNewCoins = 10;
+                Debug.Log("[determineRemainingCoins]: " + LobbyManager.Singleton.livingCrewMates.Value);
+                remainingCoinsNetVar.Value = remainingCoinsNetVar.Value +
+                                             numberOfNewCoins * LobbyManager.Singleton.livingCrewMates.Value;
+                SpawnNewCoinsServerRpc(numberOfNewCoins);
+            }
+            else
+            {
+                remainingCoinsNetVar.Value -= 1;
+            }
+
+            if (remainingCoinsNetVar.Value == 0)
+            {
+                CanvasLogic.Instance.StartPlayerWinScreen();
+            }
+
+            Destroy(o);
         }
-        else
-        {
-            remainingCoinsNetVar.Value -= 1;
-        }
-        if (remainingCoinsNetVar.Value == 0)
-        {
-            CanvasLogic.Instance.StartPlayerWinScreen();
-        }
-        Destroy(o);
     }
 
     [ServerRpc(RequireOwnership = false)]
