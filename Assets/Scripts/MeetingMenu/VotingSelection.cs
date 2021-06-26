@@ -54,9 +54,19 @@ public class VotingSelection : MonoBehaviour {
             }
 
             TMP_Text text = newButton.transform.GetChild(0).GetComponent<TMP_Text>();
-            text.text = player;
             Button tempButton = newButton.GetComponent<Button>();
-            tempButton.onClick.AddListener(() => MakeSelection(player));
+
+
+            if (player.Contains("[DEAD]"))
+            {
+                text.text = player.Remove(player.Length - 6);
+                tempButton.enabled = false;
+            }
+            else
+            {
+                text.text = player;
+                tempButton.onClick.AddListener(() => MakeSelection(player));
+            }
 
             // reicht für ca 4-5 Spieler
             buttonPosition.y -= 100;

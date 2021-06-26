@@ -194,6 +194,11 @@ public class LobbyManager : NetworkBehaviour {
             }
         }
     }
+
+    public void MinimizeImposterNumber()
+    {
+        this.impostersCount -= 1;
+    }
     
     [ServerRpc(RequireOwnership = false)]
     public void DetermineNumberOfLivingCrewmatesServerRPC() {

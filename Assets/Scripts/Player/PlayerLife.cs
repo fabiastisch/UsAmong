@@ -1,4 +1,5 @@
-﻿using MLAPI;
+﻿using Lobby;
+using MLAPI;
 using MLAPI.Connection;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
@@ -41,7 +42,21 @@ namespace Player {
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
             // instanceDeadBody.GetComponent<PlayerLife>().isAlive = false;
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
-            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
+            
+            LobbyManager lobbyManager = LobbyManager.Singleton;
+            lobbyManager.DetermineNumberOfLivingCrewmatesServerRPC();
+            if (netObj.GetComponent<PlayerLife>().isImposterNetVar.Value)
+            {
+                LobbyManager.Singleton.MinimizeImposterNumber();
+            }
+            Debug.Log("[KillServerRPC] imostercount:" + lobbyManager.impostersCount);
+            Debug.Log("[KillServerRPC] livingCrewMates: " + lobbyManager.livingCrewMates.Value);
+
+            if (lobbyManager.impostersCount == 0 || lobbyManager.impostersCount >= lobbyManager.livingCrewMates.Value)
+            {
+                CanvasLogic.Instance.StartImposterWinScreen();
+            }
+            
             Debug.Log("[KillServerRPC]" + LobbyManager.Singleton.livingCrewMates.Value);
         }
     }

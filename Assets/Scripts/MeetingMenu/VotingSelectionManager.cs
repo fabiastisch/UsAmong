@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
@@ -54,10 +55,7 @@ public class VotingSelectionManager : NetworkBehaviour {
 
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
         {
-            if (client.PlayerObject.GetComponent<PlayerLife>().isAliveNetVar.Value)
-            {
-                playerList.Add(client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
-            }
+            playerList.Add(client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
         }
     }
 
@@ -118,7 +116,8 @@ public class VotingSelectionManager : NetworkBehaviour {
     }
 
     public void ExecutePlayer(string electedToDie) {
-        foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+        {
             if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString()) {
                 client.PlayerObject.GetComponent<PlayerLife>().Kill();
             }
