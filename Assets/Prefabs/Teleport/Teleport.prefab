@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 793390482928734539}
   - component: {fileID: 4375323010445536202}
   - component: {fileID: 6533498380354403550}
+  - component: {fileID: 685424523}
   m_Layer: 0
   m_Name: Teleport
   m_TagString: Untagged
@@ -61,3 +62,15 @@ MonoBehaviour:
   PrefabHashGenerator: Teleport
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
+--- !u!114 &685424523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810377546431906029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b8394dc8c50774ea546d8f23ea8207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
