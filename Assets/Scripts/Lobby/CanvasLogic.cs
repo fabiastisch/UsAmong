@@ -31,6 +31,8 @@ namespace Lobby {
 
         #endregion
 
+        public bool inGame = false;
+
         public Transform start;
 
         public GameObject startButton;
@@ -91,6 +93,7 @@ namespace Lobby {
 
         public void OnStartButtonClicked() {
             Debug.Log("Start Button CLICKED");
+            inGame = true;
             LobbyManager.Singleton.StartGameServerRpc(start.position);
             LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
             Debug.Log(LobbyManager.Singleton.livingCrewMates);

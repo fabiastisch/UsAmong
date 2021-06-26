@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Lobby;
 using MLAPI;
 using MLAPI.Spawning;
+using MLAPI.Transports.Tasks;
 using MLAPI.Transports.UNET;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 public class MainMenu : MonoBehaviour {
     public GameObject startMenu;
@@ -88,10 +92,23 @@ public class MainMenu : MonoBehaviour {
     public void Join() {
         // NetworkSceneManager.SwitchScene(SceneManager.GetSceneAt(SceneManager.GetActiveScene().buildIndex + 1).name);
         UpdateSettings();
-        NetworkManager.Singleton.StartClient();
-        PlayGame();
+        SocketTasks socketTasks = NetworkManager.Singleton.StartClient();
+        CheckJoin(socketTasks);
         //connect.SetActive(false);
         //disconnect.SetActive(true); 
+    }
+
+    private async Task CheckJoin(SocketTasks socketTasks ) {
+        while (!socketTasks.IsDone) {
+            Debug.Log("connecting...");
+            await Task.Yield();
+        }
+        if ( NetUtils.IsConnected()) {
+            PlayGame();
+        }
+        else {
+            Debug.Log("Connection Error");
+        }
     }
 
     public void Server() {
@@ -143,7 +160,8 @@ public class MainMenu : MonoBehaviour {
     private void ApprovalCheck(byte[] connectionData, ulong clientId, MLAPI.NetworkManager.ConnectionApprovedDelegate callback) {
         Debug.Log("Approving a connection");
         // logic
-        bool approve = true;
+        CanvasLogic canvasLogic = CanvasLogic.Instance;
+        bool approve = !(canvasLogic && canvasLogic.inGame);
         bool createPlayerObject = false;
         // The prefab hash. Use null to use the default player prefab
         // If using this hash, replace "MyPrefabHashGenerator" with the name of a prefab added to the NetworkPrefabs field of your NetworkManager object in the scene

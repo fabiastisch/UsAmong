@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MLAPI;
 using MLAPI.Connection;
 using UnityEngine;
+using Utils;
 
 public class MyNetworkManager : MonoBehaviour {
 
@@ -50,13 +51,18 @@ public class MyNetworkManager : MonoBehaviour {
     }
 
     private void OnClientConnected(ulong client_ID) {
-        Debug.Log("Client Connected: " + client_ID);      
+        Debug.Log("Client Connected: " + client_ID);
         UpdateClientList();
 
     }
 
     private void OnClientDisconnect(ulong client_ID) {
         Debug.Log("Client Disconnected: " + client_ID);
+
+        if (!NetUtils.IsConnected()) {
+            SceneLoaderManager.LoadMainMenu();
+        }
+        
         if (NetworkManager.Singleton.IsHost) {
             return;
         }
