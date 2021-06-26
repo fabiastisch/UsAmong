@@ -33,7 +33,7 @@ public class CoinManager : NetworkBehaviour
         }
         else if (instance != this) {
             instance = this;
-            Debug.LogWarning("VotingSelectionManager already exist.");
+            Debug.LogWarning("CoinManager already exist.");
             //Destroy(gameObject);
         }
     }
@@ -90,7 +90,7 @@ public class CoinManager : NetworkBehaviour
 
             if (remainingCoinsNetVar.Value == 0)
             {
-                CanvasLogic.Instance.StartPlayerWinScreen();
+                CanvasLogic.Instance.StartCrewMatesWinScreen();
             }
 
             Destroy(o);

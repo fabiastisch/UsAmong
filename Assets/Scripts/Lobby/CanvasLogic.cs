@@ -92,13 +92,10 @@ namespace Lobby {
         }
 
         public void OnStartButtonClicked() {
-            Debug.Log("Start Button CLICKED");
             inGame = true;
             LobbyManager.Singleton.StartGameServerRpc(start.position);
             LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
-            Debug.Log(LobbyManager.Singleton.livingCrewMates);
-            CoinManager coinmanager = CoinManager.Instance;
-            coinmanager.DetermineNumberOfCoinsServerRPC();
+            CoinManager.Instance.DetermineNumberOfCoinsServerRPC();
         }
 
         public void SetStartButtonActive(bool value) {
@@ -117,7 +114,7 @@ namespace Lobby {
             Invoke(nameof(StopShowingResult), 4);
         }
 
-        public void StartPlayerWinScreen() {
+        public void StartCrewMatesWinScreen() {
             playerWinScreen.SetActive(true);
             Invoke(nameof(StopPlayerWinScreen), 10);
         }
@@ -160,7 +157,6 @@ namespace Lobby {
             else {
                 text.text = "You are Crewmate.";
             }
-
             Invoke(nameof(HideActiveYoureImpOrCrew), seconds);
         }
 

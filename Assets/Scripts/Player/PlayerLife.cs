@@ -37,27 +37,40 @@ namespace Player {
         private void KillServerRPC(ulong killedPlayerId) {
             NetworkObject netObj = NetworkManager.ConnectedClients[killedPlayerId].PlayerObject;
             netObj.GetComponent<PlayerStuff>().PlayerName.Value += " [DEAD]";
-
             GameObject deadBody = LobbyManager.Singleton.deadPlayerObject;
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
             // instanceDeadBody.GetComponent<PlayerLife>().isAlive = false;
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
             
-            LobbyManager lobbyManager = LobbyManager.Singleton;
-            lobbyManager.DetermineNumberOfLivingCrewmatesServerRPC();
-            if (netObj.GetComponent<PlayerLife>().isImposterNetVar.Value)
+            updateAmountOfLivingBeings(netObj);
+            DetermineVictory();
+            
+        }
+
+        public void updateAmountOfLivingBeings(NetworkObject client)
+        {
+            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
+            if (client.GetComponent<PlayerLife>().isImposterNetVar.Value)
             {
                 LobbyManager.Singleton.MinimizeImposterNumber();
             }
+        }
+        
+        public void DetermineVictory()
+        {
+            LobbyManager lobbyManager = LobbyManager.Singleton;
             Debug.Log("[KillServerRPC] imostercount:" + lobbyManager.impostersCount);
             Debug.Log("[KillServerRPC] livingCrewMates: " + lobbyManager.livingCrewMates.Value);
 
-            if (lobbyManager.impostersCount == 0 || lobbyManager.impostersCount >= lobbyManager.livingCrewMates.Value)
+            if (lobbyManager.livingCrewMates.Value <= lobbyManager.impostersCount)
             {
                 CanvasLogic.Instance.StartImposterWinScreen();
             }
-            
-            Debug.Log("[KillServerRPC]" + LobbyManager.Singleton.livingCrewMates.Value);
+            else if (lobbyManager.impostersCount == 0)
+            {
+                CanvasLogic.Instance.StartCrewMatesWinScreen();
+            }
+
         }
     }
 }

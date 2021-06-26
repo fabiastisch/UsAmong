@@ -3,6 +3,7 @@ using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
+using Teleport;
 using UnityEngine;
 using UnityEngine.Analytics;
 using Utils;
@@ -72,7 +73,7 @@ namespace Player {
                             otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
 
                             VotingSelectionManager.Instance.SetPlayerServerRPC();
-                            Invoke(nameof(StartConsultationServerRpc), 1);
+                            Invoke(nameof(StartConsultation), 1);
                             Invoke(nameof(StartEveluateConsultation),
                                 21); // TODO: always check CanvasLogic:StartVoting countdown time
                             break;
@@ -83,6 +84,12 @@ namespace Player {
                     }
                 }
             }
+        }
+ 
+        public void StartConsultation()
+        {
+            TeleportManager.Instance.TeleportationServerRpc(Vector3.zero);
+            CanvasLogic.Instance.StartVoting();
         }
 
         public void PerformKill() {
@@ -205,30 +212,7 @@ namespace Player {
                                                  UtilsUnity.getDistanceBetweenGameObjects(collider2.gameObject, gameObject)));
             return colliders;
         }
+        
 
-        [ServerRpc(RequireOwnership = false)]
-        public void StartConsultationServerRpc() {
-            Debug.Log("[PlayerControls]: StartConsultationServerRpc");
-            Vector3 consultationPosition = Vector3.zero;
-            StartConsultationClientRpc(consultationPosition);
-        }
-
-        [ClientRpc]
-        public void StartConsultationClientRpc(Vector3 consultationPosition) {
-            Debug.Log("[PlayerControls]: StartConsultationClientRpc");
-            GameObject localPlayer = getLocalPlayer();
-            PlayerLife playerLife = localPlayer.GetComponent<PlayerLife>();
-            if (playerLife.isAliveNetVar.Value) {
-                Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-                localPlayer.transform.position = consultationPosition;
-            }
-
-            CanvasLogic.Instance.StartVoting();
-        }
-
-        public GameObject getLocalPlayer() {
-            return NetworkSpawnManager.GetLocalPlayerObject().gameObject;
-            ;
-        }
     }
 }
