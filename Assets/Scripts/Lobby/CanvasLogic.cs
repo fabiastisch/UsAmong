@@ -93,7 +93,7 @@ namespace Lobby {
 
         public void OnStartButtonClicked() {
             inGame = true;
-            LobbyManager.Singleton.StartGameServerRpc(start.position);
+            LobbyManager.Singleton.StartGameServerRpc();
             LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
             CoinManager.Instance.DetermineNumberOfCoinsServerRPC();
         }

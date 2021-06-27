@@ -70,7 +70,7 @@ namespace Player {
                         if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
                             // otherPlayerLife.isReported = true;
                             Debug.Log("[ON REPORT] report player: " + otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-                            otherPlayer.GetComponent<PlayerStuff>().DestroyMeServerRpc();
+                            otherPlayer.GetComponent<PlayerLife>().Kill();
 
                             VotingSelectionManager.Instance.SetPlayerServerRPC();
                             Invoke(nameof(StartConsultation), 1);

@@ -1,4 +1,5 @@
-﻿using Lobby;
+﻿using System.Collections;
+using Lobby;
 using MLAPI;
 using MLAPI.Connection;
 using MLAPI.Messaging;
@@ -8,43 +9,52 @@ using Utils;
 
 namespace Player {
     [RequireComponent(typeof(NetworkObject))]
-    public class PlayerLife : NetworkBehaviour {
+    public class PlayerLife : NetworkBehaviour
+    {
         public NetworkVariableBool isAliveNetVar = new NetworkVariableBool(NetUtils.Everyone, true);
         public bool isReportable = false;
         public NetworkVariableBool isImposterNetVar = new NetworkVariableBool(NetUtils.Everyone, false);
+        private ArrayList deadBodys = new ArrayList();
 
-        private void Start() {
+        private void Start()
+        {
             // Change Color if Imposter
-            isImposterNetVar.OnValueChanged += (value, newValue) => {
+            isImposterNetVar.OnValueChanged += (value, newValue) =>
+            {
                 GameObject local = NetUtils.GetLocalObject().gameObject;
-                if (local.GetComponent<PlayerLife>().isImposterNetVar.Value) {
-                    if (newValue) {
+                if (local.GetComponent<PlayerLife>().isImposterNetVar.Value)
+                {
+                    if (newValue)
+                    {
                         GetComponent<PlayerStuff>().playerNameTMP.color = Color.red;
                     }
                 }
-                if (!newValue) {
-                    GetComponent<PlayerStuff>().playerNameTMP.color = Color.black;
+
+                if (!newValue)
+                {
+                    GetComponent<PlayerStuff>().playerNameTMP.color = Color.white;
                 }
             };
         }
 
-        public void Kill() {
+        public void Kill()
+        {
             isAliveNetVar.Value = false;
             KillServerRPC(GetComponent<NetworkObject>().OwnerClientId);
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void KillServerRPC(ulong killedPlayerId) {
+        private void KillServerRPC(ulong killedPlayerId)
+        {
             NetworkObject netObj = NetworkManager.ConnectedClients[killedPlayerId].PlayerObject;
-            netObj.GetComponent<PlayerStuff>().PlayerName.Value += " [DEAD]";
+            netObj.GetComponent<PlayerStuff>().PlayerName.Value += "[DEAD]";
             GameObject deadBody = LobbyManager.Singleton.deadPlayerObject;
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
-            // instanceDeadBody.GetComponent<PlayerLife>().isAlive = false;
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
-            
+            deadBodys.Add(instanceDeadBody);
+
             updateAmountOfLivingBeings(netObj);
             DetermineVictory();
-            
         }
 
         public void updateAmountOfLivingBeings(NetworkObject client)
@@ -55,22 +65,30 @@ namespace Player {
                 LobbyManager.Singleton.MinimizeImposterNumber();
             }
         }
-        
+
         public void DetermineVictory()
         {
             LobbyManager lobbyManager = LobbyManager.Singleton;
-            Debug.Log("[KillServerRPC] imostercount:" + lobbyManager.impostersCount);
-            Debug.Log("[KillServerRPC] livingCrewMates: " + lobbyManager.livingCrewMates.Value);
 
             if (lobbyManager.livingCrewMates.Value <= lobbyManager.impostersCount)
             {
                 CanvasLogic.Instance.StartImposterWinScreen();
+                LobbyManager.Singleton.ResetGameServerRpc();
             }
             else if (lobbyManager.impostersCount == 0)
             {
                 CanvasLogic.Instance.StartCrewMatesWinScreen();
+                LobbyManager.Singleton.ResetGameServerRpc();
             }
-
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        public void DestroyDeadBodyServerRPC()
+        {
+            foreach (GameObject deadBody in deadBodys)
+            {
+                Destroy(deadBody);
+            }
         }
     }
 }

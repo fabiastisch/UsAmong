@@ -33,18 +33,5 @@ namespace Player {
                 Debug.LogWarning("[PlayerStuff] playerNameTMP : " + playerNameTMP);
             }
         }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void DestroyMeServerRpc() {
-            Debug.Log("[DestroyMeServerRPC]");
-            //NetworkManager.Destroy(GetComponent<NetworkObject>());
-            GetComponent<NetworkObject>().Despawn(true);
-            LobbyManager.Singleton.DetermineNumberOfLivingCrewmatesServerRPC();
-        }
-        
-        public bool isLocalPlayer()
-        {
-            return this.IsLocalPlayer;
-        }
     }
 }

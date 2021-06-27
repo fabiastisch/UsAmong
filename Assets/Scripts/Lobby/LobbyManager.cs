@@ -9,6 +9,7 @@ using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 using MLAPI.Spawning;
 using Player;
+using Teleport;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
@@ -145,9 +146,8 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void StartGameServerRpc(Vector3 startGamePosPara) {
+    public void StartGameServerRpc() {
         
-        this.startGamePos = startGamePosPara;
         int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
         SetImposters();
@@ -220,7 +220,7 @@ public class LobbyManager : NetworkBehaviour {
      */
     private void StartGame() {
         Debug.Log("[StartGame]");
-        StartGameClientRpc(startGamePos);
+        StartGameClientRpc();
     }
 
     [ClientRpc]
@@ -229,22 +229,51 @@ public class LobbyManager : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void StartGameClientRpc(Vector3 startGamePosition) {
+    public void StartGameClientRpc() {
         Debug.Log("[StartGameClientRpc]");
         CanvasLogic.Instance.StopCountdown();
         CanvasLogic.Instance.SetYoureImpOrCrewMate(2);
         GameObject localPlayer = this.getLocalPlayer();
-        Debug.Log("Got local Player: " + localPlayer);
-        Debug.Log("move player: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-        localPlayer.transform.position = startGamePosition;
-        // startGamePos += new Vector3(2f, 0);
+        
+        Vector3 random = new Vector3(Random.Range(-65f, -55f), Random.Range(-75f, -85f), 0);
+        localPlayer.transform.position = random;
     }
-
-
+    
+    
     [ServerRpc(RequireOwnership = false)]
-    public void DestroyMeServerRpc() {
-        player.GetComponent<NetworkObject>().Despawn(true);
+    public void ResetGameServerRpc()
+    {
+        ResetGameClientRpc();
     }
+    
+    
+    [ClientRpc]
+    public void ResetGameClientRpc()
+    {
+        GameObject playerObj = getLocalPlayer();
+        
+        NetworkVariableString playerName = playerObj.GetComponent<PlayerStuff>().PlayerName;
+        if (playerName.Value.Contains("[DEAD]"))
+        {
+            playerName.Value = playerName.Value.Substring(playerName.Value.Length - "[DEAD]".Length);
+        }
+        
+        PlayerLife playerLife = playerObj.GetComponent<PlayerLife>();
+        playerLife.DestroyDeadBodyServerRPC();
+        playerLife.isImposterNetVar.Value = false;
+        playerLife.isAliveNetVar.Value = true;
+        
+        CoinManager.Instance.DestroyAllLocalCoins();
+        CoinManager.Instance.remainingCoinsNetVar.Value = 0;
+        
+        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        TeleportManager.Instance.TeleportationServerRpc(random);
+
+        CanvasLogic.Instance.inGame = false;
+        CanvasLogic.Instance.SetStartButtonActive(true);
+        CanvasLogic.Instance.killBtnObj.SetActive(true);
+    }
+    
 
     public GameObject getLocalPlayer() {
         return NetworkSpawnManager.GetLocalPlayerObject().gameObject;

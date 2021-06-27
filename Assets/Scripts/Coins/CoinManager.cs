@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lobby;
@@ -18,6 +19,7 @@ public class CoinManager : NetworkBehaviour
     #region SingletonPattern
 
     private static CoinManager instance;
+    private ArrayList allCoins = new ArrayList();
 
 
     public static CoinManager Instance {
@@ -91,8 +93,8 @@ public class CoinManager : NetworkBehaviour
             if (remainingCoinsNetVar.Value == 0)
             {
                 CanvasLogic.Instance.StartCrewMatesWinScreen();
+                LobbyManager.Singleton.ResetGameServerRpc();
             }
-
             Destroy(o);
         }
     }
@@ -111,8 +113,18 @@ public class CoinManager : NetworkBehaviour
             for (int i = 0; i < amountOfCoins; i++)
             {
                 Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
-                Instantiate(coinObject, random, Quaternion.identity);
+                GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
+                allCoins.Add(coin);
             } 
         }
     }
+
+    public void DestroyAllLocalCoins()
+    {
+        foreach (GameObject coin in allCoins)
+        {
+            Destroy(coin);
+        }
+    }
+    
 }

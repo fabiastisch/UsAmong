@@ -31,7 +31,6 @@ namespace Teleport
             else if (instance != this) {
                 instance = this;
                 Debug.LogWarning("TeleportManager already exist.");
-                //Destroy(gameObject);
             }
         }
 
@@ -44,7 +43,8 @@ namespace Teleport
         }
 
         [ClientRpc]
-        public void TeleportationClientRpc(Vector3 position ) {
+        public void TeleportationClientRpc(Vector3 position)
+        {
             GameObject localPlayer = getLocalPlayer();
             localPlayer.transform.position = position;
         }
