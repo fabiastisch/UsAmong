@@ -52,8 +52,8 @@ namespace Lobby {
         public GameObject killBtnObj;
         public GameObject reportBtnObj;
 
-        public GameObject coinCounterObj;
-
+        public GameObject Coinbar;
+        
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
 
@@ -211,6 +211,16 @@ namespace Lobby {
                 tmpColor.a = 0.5f;
                 reportBtnObj.GetComponent<Image>().color = tmpColor;
             }
+        }
+        
+        public void SetCoinBarValue(int health)
+        {
+            Coinbar.GetComponent<Slider>().value = health;
+        }
+
+        public void SetCoinbarMaxValue(int maxCoins)
+        {
+            Coinbar.GetComponent<Slider>().maxValue = maxCoins;
         }
     }
 }

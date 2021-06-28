@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
-using MLAPI.NetworkVariable.Collections;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -19,9 +16,7 @@ public class CoinManager : NetworkBehaviour
     #region SingletonPattern
 
     private static CoinManager instance;
-    private ArrayList allCoins = new ArrayList();
-
-
+    
     public static CoinManager Instance {
         get => instance;
     }
@@ -43,31 +38,25 @@ public class CoinManager : NetworkBehaviour
     #endregion
     
     public NetworkVariableInt remainingCoinsNetVar = new NetworkVariableInt(NetUtils.Everyone, 0);
-    
-
     public GameObject coinObject;
+    
     private TMP_Text text;
-
     private int coinsPerPlayer = 20;
     private bool isImposter;
+    private ArrayList allCoins = new ArrayList();
+    private NetworkVariableInt totalCoins  = new NetworkVariableInt(NetUtils.Everyone, 0);
+
+
 
     // Start is called before the first frame update
-
-    public void Start()
-    {
-        text = CanvasLogic.Instance.coinCounterObj.GetComponent<TMP_Text>();
-    }
     
-    public void Update()
-    {
-        text.text = "Coins to Collect: " + remainingCoinsNetVar.Value;
-    }
+
 
     [ServerRpc(RequireOwnership = false)]
     public void DetermineNumberOfCoinsServerRPC()
     {
-        Debug.Log(LobbyManager.Singleton.livingCrewMates.Value );
-        remainingCoinsNetVar.Value = LobbyManager.Singleton.livingCrewMates.Value * coinsPerPlayer;
+        totalCoins.Value = LobbyManager.Singleton.livingCrewMates.Value * coinsPerPlayer;
+        remainingCoinsNetVar.Value = totalCoins.Value;
         SpawnNewCoinsClientRPC(coinsPerPlayer);
     }
     
@@ -79,15 +68,15 @@ public class CoinManager : NetworkBehaviour
 
             if (isImposter)
             {
-                int numberOfNewCoins = 10;
-                Debug.Log("[determineRemainingCoins]: " + LobbyManager.Singleton.livingCrewMates.Value);
-                remainingCoinsNetVar.Value = remainingCoinsNetVar.Value +
-                                             numberOfNewCoins * LobbyManager.Singleton.livingCrewMates.Value;
+                int numberOfNewCoins = 10 * LobbyManager.Singleton.livingCrewMates.Value;
+                remainingCoinsNetVar.Value += numberOfNewCoins;
+                totalCoins.Value += numberOfNewCoins;
+                CanvasLogic.Instance.SetCoinbarMaxValue(totalCoins.Value);
                 SpawnNewCoinsServerRpc(numberOfNewCoins);
             }
             else
             {
-                remainingCoinsNetVar.Value -= 1;
+                remainingCoinsNetVar.Value--;
             }
 
             if (remainingCoinsNetVar.Value == 0)
@@ -95,6 +84,7 @@ public class CoinManager : NetworkBehaviour
                 CanvasLogic.Instance.StartCrewMatesWinScreen();
                 LobbyManager.Singleton.ResetGameServerRpc();
             }
+            CanvasLogic.Instance.SetCoinBarValue(-(remainingCoinsNetVar.Value - totalCoins.Value));
             Destroy(o);
         }
     }
@@ -108,6 +98,7 @@ public class CoinManager : NetworkBehaviour
     [ClientRpc]
     public void SpawnNewCoinsClientRPC(int amountOfCoins)
     {
+        CanvasLogic.Instance.SetCoinbarMaxValue(totalCoins.Value);
         if (!isImposter)
         {
             for (int i = 0; i < amountOfCoins; i++)
@@ -126,5 +117,5 @@ public class CoinManager : NetworkBehaviour
             Destroy(coin);
         }
     }
-    
+
 }
