@@ -1,11 +1,9 @@
 using System;
-using Lobby;
 using MLAPI;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
 using Player;
 using UnityEngine;
-using Utils;
 
 namespace Teleport
 {
@@ -41,11 +39,6 @@ namespace Teleport
         public void TeleportationServerRpc(Vector3 position) {
             TeleportationClientRpc(position);
         }
-        
-        [ServerRpc(RequireOwnership = false)]
-        public void TeleportationServerRpc(Vector3 position, GameObject other) {
-            TeleportationClientRpc(position, other);
-        }
 
         [ClientRpc]
         public void TeleportationClientRpc(Vector3 position)
@@ -53,13 +46,7 @@ namespace Teleport
             GameObject localPlayer = getLocalPlayer();
             localPlayer.transform.position = position;
         }
-        
-        [ClientRpc]
-        public void TeleportationClientRpc(Vector3 position, GameObject other)
-        {
-            other.transform.position = position;
-        }
-        
+
         public GameObject getLocalPlayer() {
             return NetworkSpawnManager.GetLocalPlayerObject().gameObject;
         }

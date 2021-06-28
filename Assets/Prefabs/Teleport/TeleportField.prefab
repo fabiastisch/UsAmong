@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5471094392450377937}
   - component: {fileID: 2273007262904725456}
   - component: {fileID: 8598686706773366492}
-  - component: {fileID: 4048848160950132226}
+  - component: {fileID: 2119231566759308135}
   m_Layer: 0
   m_Name: TeleportField
   m_TagString: Untagged
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.1}
   m_EdgeRadius: 0
---- !u!114 &4048848160950132226
+--- !u!114 &2119231566759308135
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

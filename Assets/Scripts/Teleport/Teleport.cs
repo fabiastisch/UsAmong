@@ -13,7 +13,8 @@ namespace Teleport
             { 
                 random = new Vector2(Random.Range(-160f, 40f), Random.Range(-20f, -140f));
             }
-            TeleportManager.Instance.TeleportationServerRpc(random,other.gameObject);        
+
+            other.gameObject.transform.position = random;
         }
     }
 }

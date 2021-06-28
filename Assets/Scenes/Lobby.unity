@@ -217,7 +217,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport0
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -274,7 +274,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1 &130700660
 GameObject:
@@ -1550,7 +1551,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport4
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -1607,7 +1608,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1001 &485012359
 PrefabInstance:
@@ -2863,7 +2865,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport8
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -3097,7 +3099,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport6
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -3154,7 +3156,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1001 &1128052093
 PrefabInstance:
@@ -3569,7 +3572,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport10
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -4690,7 +4693,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport1
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -4747,7 +4750,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1001 &1593953352
 PrefabInstance:
@@ -4759,7 +4763,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport5
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -4816,7 +4820,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1001 &1599540827
 PrefabInstance:
@@ -5078,7 +5083,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport7
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -6599,7 +6604,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport2
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
@@ -6656,7 +6661,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4048848160950132226, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: feb4e16d59fb84099a952bee983ff961, type: 3}
 --- !u!1001 &2057874598
 PrefabInstance:
@@ -6922,7 +6928,7 @@ PrefabInstance:
     - target: {fileID: 5363204650086811376, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
       propertyPath: m_Name
-      value: Teleport
+      value: Teleport9
       objectReference: {fileID: 0}
     - target: {fileID: 5471094392450377937, guid: feb4e16d59fb84099a952bee983ff961,
         type: 3}
