@@ -29,7 +29,8 @@ namespace Lobby {
         
         public GameObject chatPanel;
         public GameObject textObject;
-        public InputField chatBox; 
-        
+        public InputField chatBox;
+        public GameObject deathBox;
+
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lobby;
+using MeetingMenu;
+using MLAPI.Connection;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -45,34 +48,44 @@ public class VotingSelection : MonoBehaviour {
         for (int i = 0; i < parent.transform.childCount; i++) {
             Destroy(parent.transform.GetChild(i).gameObject);
         }
+        
+        // Store DeadPlayer to replace them to the End
+        List<NetworkPlayerForMeeting> deadPlayer = new List<NetworkPlayerForMeeting>();
 
-        foreach (string player in VotingSelectionManager.Instance.GetPlayers()) {
-            GameObject newButton = Instantiate(newButtonPrefab, buttonPosition, Quaternion.identity, parent.transform);
-
-            if (newButton.transform.childCount < 1) {
-                Debug.LogError("[ImposterSelection]: Button ChildCount < 1. Should contain Text");
+        foreach (NetworkPlayerForMeeting player in VotingSelectionManager.Instance.GetPlayers()) {
+            if (!player.alive) {
+                // Player is Dead
+                deadPlayer.Add(player);
             }
-
-            TMP_Text text = newButton.transform.GetChild(0).GetComponent<TMP_Text>();
-            Button tempButton = newButton.GetComponent<Button>();
-
-
-            if (player.Contains("[DEAD]"))
-            {
-                text.text = player.Remove(player.Length - 6);
-                tempButton.enabled = false;
+            else {
+                string playername = player.playerName;
+                AddPlayerButton(buttonPosition, playername);
+                // reicht für ca 4-5 Spieler
+                buttonPosition.y -= 100;
             }
-            else
-            {
-                text.text = player;
-                tempButton.onClick.AddListener(() => MakeSelection(player));
-            }
-
+        }
+        
+        // Append DeadPlayer at the end
+        foreach (NetworkPlayerForMeeting player in deadPlayer) {
+            string playername = player.playerName;
+            AddPlayerButton(buttonPosition, playername, false);
             // reicht für ca 4-5 Spieler
             buttonPosition.y -= 100;
         }
     }
 
+    private void AddPlayerButton(Vector3 buttonPosition, string playername, bool enabled = true) {
+        GameObject newButton = Instantiate(newButtonPrefab, buttonPosition, Quaternion.identity, parent.transform);
+        if (newButton.transform.childCount < 1) {
+            Debug.LogError("[VotingSelection]: Button ChildCount < 1. Should contain Text");
+        }
+
+        TMP_Text text = newButton.transform.GetChild(0).GetComponent<TMP_Text>();
+        Button tempButton = newButton.GetComponent<Button>();
+        tempButton.enabled = enabled;
+        text.text = playername;
+        tempButton.onClick.AddListener(() => MakeSelection(playername));
+    }
 
     public void MakeSelection(string playerName) {
         Debug.Log("[ImposterSelection] MakeSelection");
@@ -83,5 +96,4 @@ public class VotingSelection : MonoBehaviour {
         canvasText.text = resultMessage;
         CanvasLogic.Instance.StopVoting();
     }
-
 }

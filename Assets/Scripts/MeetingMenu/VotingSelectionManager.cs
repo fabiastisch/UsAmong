@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Lobby;
+using MeetingMenu;
 using MLAPI;
+using MLAPI.Connection;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
@@ -36,7 +38,7 @@ public class VotingSelectionManager : NetworkBehaviour {
 
     #endregion
 
-    public NetworkList<string> playerList = new NetworkList<string>(NetUtils.Everyone);
+    public NetworkList<NetworkPlayerForMeeting> playerList = new NetworkList<NetworkPlayerForMeeting>(NetUtils.Everyone);
 
     public NetworkList<string> selectionList = new NetworkList<string>(new NetworkVariableSettings() {
         ReadPermission = NetworkVariablePermission.Everyone,
@@ -44,7 +46,7 @@ public class VotingSelectionManager : NetworkBehaviour {
         SendTickrate = 5
     }, new List<string>());
 
-    public IEnumerable<string> GetPlayers() {
+    public IEnumerable<NetworkPlayerForMeeting> GetPlayers() {
         return this.playerList;
     }
 
@@ -53,9 +55,10 @@ public class VotingSelectionManager : NetworkBehaviour {
         Debug.Log("[VotingSelectionManager] SetPlayerServerRPC");
         playerList.Clear();
 
-        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-        {
-            playerList.Add(client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
+            string playerName = client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value;
+            bool alive = client.PlayerObject.GetComponent<PlayerLife>().isAliveNetVar.Value;
+            playerList.Add(new NetworkPlayerForMeeting(client.ClientId,playerName, alive));
         }
     }
 
@@ -108,7 +111,7 @@ public class VotingSelectionManager : NetworkBehaviour {
 
         ShowResultClientRpc(resultMessage);
     }
-    
+
 
     [ClientRpc]
     public void ShowResultClientRpc(string resultMessage) {
@@ -116,8 +119,7 @@ public class VotingSelectionManager : NetworkBehaviour {
     }
 
     public void ExecutePlayer(string electedToDie) {
-        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-        {
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
             if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString()) {
                 client.PlayerObject.GetComponent<PlayerLife>().Kill();
             }

@@ -47,14 +47,29 @@ namespace Player {
         private void KillServerRPC(ulong killedPlayerId)
         {
             NetworkObject netObj = NetworkManager.ConnectedClients[killedPlayerId].PlayerObject;
-            netObj.GetComponent<PlayerStuff>().PlayerName.Value += "[DEAD]";
+            //netObj.GetComponent<PlayerStuff>().PlayerName.Value += "[DEAD]";
             GameObject deadBody = LobbyManager.Singleton.deadPlayerObject;
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
+            // Tp Dead player to Death Box
+           
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
             deadBodys.Add(instanceDeadBody);
 
+            ClientRpcParams clientRpcParams = new ClientRpcParams() {
+                Send = new ClientRpcSendParams() {
+                    TargetClientIds = new []{killedPlayerId}
+                }
+            };
+            KillClientRPC(clientRpcParams);
+            
+
             updateAmountOfLivingBeings(netObj);
             DetermineVictory();
+        }
+
+        [ClientRpc]
+        private void KillClientRPC(ClientRpcParams clientRpcParams = default) {
+            transform.position = LocalLobbyManager.Instance.deathBox.transform.position;
         }
 
         public void updateAmountOfLivingBeings(NetworkObject client)

@@ -253,10 +253,10 @@ public class LobbyManager : NetworkBehaviour {
         GameObject playerObj = getLocalPlayer();
         
         NetworkVariableString playerName = playerObj.GetComponent<PlayerStuff>().PlayerName;
-        if (playerName.Value.Contains("[DEAD]"))
+        /*if (playerName.Value.Contains("[DEAD]"))
         {
             playerName.Value = playerName.Value.Substring(playerName.Value.Length - "[DEAD]".Length);
-        }
+        }*/
         
         PlayerLife playerLife = playerObj.GetComponent<PlayerLife>();
         playerLife.DestroyDeadBodyServerRPC();

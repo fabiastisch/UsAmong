@@ -5,7 +5,6 @@ using Utils;
 namespace Lobby {
     public class Lobby : MonoBehaviour {
         public GameObject lobbyManager;
-        public GameObject gameManager;
 
         public GameObject canvas;
 
