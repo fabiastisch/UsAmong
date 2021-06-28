@@ -103,7 +103,11 @@ public class CoinManager : NetworkBehaviour
         {
             for (int i = 0; i < amountOfCoins; i++)
             {
-                Vector3 random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f), 0);
+                Vector2 random = new Vector2(Random.Range(-160f, 40f), Random.Range(-20f, -140f));
+                while (Physics2D.OverlapCircleAll(random, 1f).Length > 0)
+                { 
+                    random = new Vector3(Random.Range(-160f, 40f), Random.Range(-20f, -140f));
+                }
                 GameObject coin = Instantiate(coinObject, random, Quaternion.identity);
                 allCoins.Add(coin);
             } 
