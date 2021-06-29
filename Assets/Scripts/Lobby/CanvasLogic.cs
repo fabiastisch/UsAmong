@@ -51,6 +51,7 @@ namespace Lobby {
 
         public GameObject killBtnObj;
         public GameObject reportBtnObj;
+        public Image killCoolDownTime;
 
         public GameObject Coinbar;
         
@@ -89,6 +90,8 @@ namespace Lobby {
                     }
                 }
             };
+            
+            killCoolDownTime.fillAmount = 0;
         }
 
         public void OnStartButtonClicked() {
@@ -213,6 +216,11 @@ namespace Lobby {
             }
         }
         
+        public void SetCoolDownTimeValue(float leftCoolDownTime)
+        {
+            killCoolDownTime.fillAmount = leftCoolDownTime;
+        }
+
         public void SetCoinBarValue(int health)
         {
             Coinbar.GetComponent<Slider>().value = health;

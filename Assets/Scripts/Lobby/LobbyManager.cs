@@ -165,7 +165,7 @@ public class LobbyManager : NetworkBehaviour {
         
 
         var imposters = new List<NetworkClient>();
-        if (playerList.Count > 3) {
+        if (playerList.Count > 5) {
             // 2 Imposter
             for (int i = 0; i < 2; i++) {
                 int random = UtilsUnity.GetRandomInt(playerList.Count - 1);
@@ -263,6 +263,10 @@ public class LobbyManager : NetworkBehaviour {
         playerLife.isImposterNetVar.Value = false;
         playerLife.isAliveNetVar.Value = true;
         
+        PlayerControls playerControls = playerObj.GetComponent<PlayerControls>();
+        playerControls.coolDownTime = 0f;
+        playerControls.killCoolDownActive = false;
+
         CoinManager.Instance.DestroyAllLocalCoins();
         CoinManager.Instance.remainingCoinsNetVar.Value = 0;
         

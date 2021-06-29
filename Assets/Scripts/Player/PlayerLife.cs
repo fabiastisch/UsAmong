@@ -61,8 +61,6 @@ namespace Player {
                 }
             };
             KillClientRPC(clientRpcParams);
-            
-
             updateAmountOfLivingBeings(netObj);
             DetermineVictory();
         }
