@@ -28,15 +28,16 @@ public class LobbyManager : NetworkBehaviour {
         WritePermission = NetworkVariablePermission.Everyone,
         SendTickrate = 5
     }, new List<string>());
-    
+
     public NetworkVariableInt livingCrewMates = new NetworkVariableInt(NetUtils.Everyone, 0);
 
 
     /**
+     * Current ImposterCount
      * Server only
      */
     public int impostersCount { get; private set; }
-    
+
     /**
      * Event get's invoke, after Local Player was Spawned.
      */
@@ -87,9 +88,8 @@ public class LobbyManager : NetworkBehaviour {
             SpawnMeServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
-
-    /*
-     * Server Side
+    /**
+     * On Server
      */
     private void SpawnPlayer(ulong clientId) {
         Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
@@ -147,7 +147,6 @@ public class LobbyManager : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     public void StartGameServerRpc() {
-        
         int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
         SetImposters();
@@ -162,7 +161,7 @@ public class LobbyManager : NetworkBehaviour {
         NetworkClient[] networkClients = new NetworkClient[NetworkManager.Singleton.ConnectedClientsList.Count];
         NetworkManager.Singleton.ConnectedClientsList.CopyTo(networkClients);
         List<NetworkClient> playerList = networkClients.ToList();
-        
+
 
         var imposters = new List<NetworkClient>();
         if (playerList.Count > 5) {
@@ -172,8 +171,8 @@ public class LobbyManager : NetworkBehaviour {
                 imposters.Add(playerList[random]);
                 playerList.RemoveAt(random);
             }
-            
-        }else if (playerList.Count > 1) {
+        }
+        else if (playerList.Count > 1) {
             // 1 Imposter
             int random = UtilsUnity.GetRandomInt(playerList.Count - 1);
             imposters.Add(playerList[random]);
@@ -182,8 +181,8 @@ public class LobbyManager : NetworkBehaviour {
         }
 
         this.impostersCount = imposters.Count;
-        
-        
+
+
         foreach (NetworkClient imposter in imposters) {
             if (imposter.PlayerObject) {
                 PlayerLife playerLife = imposter.PlayerObject.GetComponent<PlayerLife>();
@@ -195,21 +194,27 @@ public class LobbyManager : NetworkBehaviour {
         }
     }
 
-    public void MinimizeImposterNumber()
-    {
+    /**
+     * Server only
+     */
+    public void MinimizeImposterNumber() {
         this.impostersCount -= 1;
     }
-    
+
     [ServerRpc(RequireOwnership = false)]
     public void DetermineNumberOfLivingCrewmatesServerRPC() {
         Debug.Log("[LobbyManager] DetermineNumberOfLivingCrewmatesServerRPC");
+        DetermineNumberOfLivingCrewmatesOnServer();
+    }
 
+    /**
+     * On Server
+     */
+    public void DetermineNumberOfLivingCrewmatesOnServer() {
         livingCrewMates.Value = 0;
-        foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
-        {
+        foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
             PlayerLife playerLife = client.PlayerObject.GetComponent<PlayerLife>();
-            if (playerLife.isAliveNetVar.Value && !playerLife.isImposterNetVar.Value)
-            {
+            if (playerLife.isAliveNetVar.Value && !playerLife.isImposterNetVar.Value) { // if Alive & not Imposter
                 livingCrewMates.Value++;
             }
         }
@@ -234,42 +239,47 @@ public class LobbyManager : NetworkBehaviour {
         CanvasLogic.Instance.StopCountdown();
         CanvasLogic.Instance.SetYoureImpOrCrewMate(2);
         GameObject localPlayer = this.getLocalPlayer();
-        
+
         Vector3 random = new Vector3(Random.Range(-65f, -55f), Random.Range(-75f, -85f), 0);
         localPlayer.transform.position = random;
     }
-    
-    
+
+
     [ServerRpc(RequireOwnership = false)]
-    public void ResetGameServerRpc()
-    {
+    public void ResetGameServerRpc() {
         ResetGameClientRpc();
     }
-    
-    
+
+    /**
+     *  On Server
+     */
+    public void ResetGameOnServer() {
+        ResetGameClientRpc();
+    }
+
+
     [ClientRpc]
-    public void ResetGameClientRpc()
-    {
+    public void ResetGameClientRpc() {
         GameObject playerObj = getLocalPlayer();
-        
+
         NetworkVariableString playerName = playerObj.GetComponent<PlayerStuff>().PlayerName;
         /*if (playerName.Value.Contains("[DEAD]"))
         {
             playerName.Value = playerName.Value.Substring(playerName.Value.Length - "[DEAD]".Length);
         }*/
-        
+
         PlayerLife playerLife = playerObj.GetComponent<PlayerLife>();
         playerLife.DestroyDeadBodyServerRPC();
         playerLife.isImposterNetVar.Value = false;
         playerLife.isAliveNetVar.Value = true;
-        
+
         PlayerControls playerControls = playerObj.GetComponent<PlayerControls>();
         playerControls.coolDownTime = 0f;
         playerControls.killCoolDownActive = false;
 
         CoinManager.Instance.DestroyAllLocalCoins();
         CoinManager.Instance.remainingCoinsNetVar.Value = 0;
-        
+
         Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
         TeleportManager.Instance.TeleportationServerRpc(random);
 
@@ -277,7 +287,7 @@ public class LobbyManager : NetworkBehaviour {
         CanvasLogic.Instance.SetStartButtonActive(true);
         CanvasLogic.Instance.killBtnObj.SetActive(true);
     }
-    
+
 
     public GameObject getLocalPlayer() {
         return NetworkSpawnManager.GetLocalPlayerObject().gameObject;

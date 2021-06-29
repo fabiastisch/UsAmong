@@ -128,7 +128,7 @@ namespace Lobby {
 
         public void StartImposterWinScreen() {
             imposterWinScreen.SetActive(true);
-            Invoke(nameof(StopImposterWinScreen), 10);
+            Invoke(nameof(StopImposterWinScreen), 5);
         }
 
         public void StopImposterWinScreen() {

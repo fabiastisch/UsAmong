@@ -5,7 +5,7 @@ namespace Coins {
 
         private void OnTriggerEnter2D(Collider2D other) {
             GameObject player = other.transform.parent.gameObject;
-            CoinManager.Instance.determineRemainingCoins(gameObject, player);
+            CoinManager.Instance.DetermineRemainingCoins(gameObject, player);
         }
     
     }
