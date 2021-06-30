@@ -54,7 +54,10 @@ namespace Lobby {
         public Image killCoolDownTime;
 
         public GameObject Coinbar;
-        
+
+        public GameObject chat;
+        public GameObject openChatButton;
+
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
 
@@ -90,7 +93,7 @@ namespace Lobby {
                     }
                 }
             };
-            
+
             killCoolDownTime.fillAmount = 0;
         }
 
@@ -160,6 +163,7 @@ namespace Lobby {
             else {
                 text.text = "You are Crewmate.";
             }
+
             Invoke(nameof(HideActiveYoureImpOrCrew), seconds);
         }
 
@@ -215,20 +219,22 @@ namespace Lobby {
                 reportBtnObj.GetComponent<Image>().color = tmpColor;
             }
         }
-        
-        public void SetCoolDownTimeValue(float leftCoolDownTime)
-        {
+
+        public void SetCoolDownTimeValue(float leftCoolDownTime) {
             killCoolDownTime.fillAmount = leftCoolDownTime;
         }
 
-        public void SetCoinBarValue(int health)
-        {
+        public void SetCoinBarValue(int health) {
             Coinbar.GetComponent<Slider>().value = health;
         }
 
-        public void SetCoinbarMaxValue(int maxCoins)
-        {
+        public void SetCoinbarMaxValue(int maxCoins) {
             Coinbar.GetComponent<Slider>().maxValue = maxCoins;
+        }
+
+        public void ChangeChatOpenStatus() {
+            Debug.Log("[ChangeChatOpenStatus]");
+            chat.SetActive(!chat.activeSelf);
         }
     }
 }
