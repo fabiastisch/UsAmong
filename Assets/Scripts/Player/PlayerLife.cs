@@ -95,10 +95,10 @@ namespace Player {
         [ClientRpc]
         private void SetWinScreenClientRPC(bool isImposterWinScreen) {
             if (isImposterWinScreen) {
-                CanvasLogic.Instance.StartImposterWinScreen();
+                CanvasLogic.Instance.StartWinScreen(true);
             }
             else {
-                CanvasLogic.Instance.StartCrewMatesWinScreen();
+                CanvasLogic.Instance.StartWinScreen(false);
             }
         }
 

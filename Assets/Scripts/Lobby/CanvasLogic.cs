@@ -24,7 +24,7 @@ namespace Lobby {
                 OnSingletonReady?.Invoke();
             }
             else if (instance != this) {
-                Debug.LogWarning("StartButton already exist.");
+                Debug.LogWarning("CanvasLogic already exist.");
                 Destroy(gameObject);
             }
         }
@@ -43,8 +43,7 @@ namespace Lobby {
 
         public GameObject countdownObj;
 
-        public GameObject playerWinScreen;
-        public GameObject imposterWinScreen;
+        public GameObject winScreen;
 
         public GameObject youreImpOrCrewMateScreen;
         public GameObject fullScreenOverlay;
@@ -120,24 +119,25 @@ namespace Lobby {
             Invoke(nameof(StopShowingResult), 4);
         }
 
-        public void StartCrewMatesWinScreen() {
-            playerWinScreen.SetActive(true);
-            Invoke(nameof(StopPlayerWinScreen), 10);
+        public void StartWinScreen(bool isImposterWin) {
+            winScreen.SetActive(true);
+            if (isImposterWin) {
+                winScreen.GetComponent<TMP_Text>().text = "Imposters Win!";
+            }
+            else {
+                winScreen.GetComponent<TMP_Text>().text = "Crewmates Win!";
+            }
+            SetFullScreenOverlay(true);
+            Invoke(nameof(StopWinScreen), 5);
         }
-
-        public void StopPlayerWinScreen() {
-            playerWinScreen.SetActive(false);
+        
+        public void StopWinScreen() {
+            winScreen.SetActive(false);
+            SetFullScreenOverlay(false);
+            SetStartButtonActive(true);
+            killBtnObj.SetActive(true);
         }
-
-        public void StartImposterWinScreen() {
-            imposterWinScreen.SetActive(true);
-            Invoke(nameof(StopImposterWinScreen), 5);
-        }
-
-        public void StopImposterWinScreen() {
-            imposterWinScreen.SetActive(false);
-        }
-
+        
         public void StopShowingResult() {
             votingResultObj.SetActive(false);
         }
@@ -170,6 +170,7 @@ namespace Lobby {
         private void HideActiveYoureImpOrCrew() {
             youreImpOrCrewMateScreen.SetActive(false);
             SetFullScreenOverlay(false);
+            openChatButton.SetActive(false);
         }
 
 
@@ -200,10 +201,24 @@ namespace Lobby {
 
         private void SetFullScreenOverlay(bool active) {
             fullScreenOverlay.SetActive(active);
-            if (!NetUtils.GetLocalObject().GetComponent<PlayerLife>().isImposterNetVar.Value) {
-                killBtnObj.SetActive(false);
+
+            if (NetUtils.GetLocalObject().GetComponent<PlayerLife>().isImposterNetVar.Value) {
+                // if Imposter
+                killBtnObj.SetActive(true);
             }
 
+            if (active) {
+                SetStartButtonActive(false);
+                killBtnObj.SetActive(false);
+                if (!NetUtils.GetLocalObject().GetComponent<PlayerLife>().isImposterNetVar.Value) {
+                    // If in FullScreenOverlay or not Imposter
+                    killBtnObj.SetActive(false);
+                }
+            }
+
+            chat.SetActive(false);
+            openChatButton.SetActive(!active);
+            Coinbar.SetActive(!active);
             reportBtnObj.SetActive(!active);
         }
 

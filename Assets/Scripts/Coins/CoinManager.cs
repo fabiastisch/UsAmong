@@ -70,7 +70,7 @@ public class CoinManager : NetworkBehaviour {
             }
 
             if (remainingCoinsNetVar.Value == 0) {
-                CanvasLogic.Instance.StartCrewMatesWinScreen();
+                CanvasLogic.Instance.StartWinScreen(false);
                 LobbyManager.Singleton.ResetGameServerRpc();
             }
 

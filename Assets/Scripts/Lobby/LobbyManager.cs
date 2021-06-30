@@ -158,7 +158,6 @@ public class LobbyManager : NetworkBehaviour {
         int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
         SetImposters();
-        Debug.Log("[AfterImpSelection]");
         Invoke(nameof(StartGame), coundowntime);
     }
 
@@ -233,7 +232,7 @@ public class LobbyManager : NetworkBehaviour {
      * On Server to call ClientRpc
      */
     private void StartGame() {
-        Debug.Log("[StartGame]");
+        Debug.Log("[LobbyManager][AfterImpSelection]:StartGame");
         StartGameClientRpc();
     }
 
@@ -293,8 +292,8 @@ public class LobbyManager : NetworkBehaviour {
         TeleportManager.Instance.TeleportationServerRpc(random);
 
         CanvasLogic.Instance.inGame = false;
-        CanvasLogic.Instance.SetStartButtonActive(true);
-        CanvasLogic.Instance.killBtnObj.SetActive(true);
+        //CanvasLogic.Instance.SetStartButtonActive(true);
+        //CanvasLogic.Instance.killBtnObj.SetActive(true);
     }
 
 
