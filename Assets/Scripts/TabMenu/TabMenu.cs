@@ -40,9 +40,9 @@ namespace TabMenu {
             else Debug.LogError("Check this Method.. to activate Canvas in Play mode if its deactivate in editor mode");
 
             UpdateText("Not Loaded...");
-            // LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
-            LobbyManager.OnSingletonReady += () =>
-                LobbyManager.Singleton.networkPlayerList.OnListChanged += NetworkPlayerListOnOnListChanged;
+            LobbyManager.OnPlayerListUpdated += OnLobbyManagerOnOnPlayerListUpdated;
+            /*LobbyManager.OnSingletonReady += () =>
+                LobbyManager.Singleton.networkPlayerList.OnListChanged += NetworkPlayerListOnOnListChanged;*/
         }
 
         private void NetworkPlayerListOnOnListChanged(NetworkListEvent<string> changeevent) {
@@ -64,7 +64,7 @@ namespace TabMenu {
                 Debug.Log(name);
             }
 
-            //UpdateText(text);
+            UpdateText(text);
         }
 
         private void OnDestroy() {

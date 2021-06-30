@@ -88,6 +88,7 @@ public class LobbyManager : NetworkBehaviour {
             SpawnMeServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
+
     /**
      * On Server
      */
@@ -122,6 +123,13 @@ public class LobbyManager : NetworkBehaviour {
         List<NetworkClient> list = MyNetworkManager.Instance.clientlist;
         List<string> playerList =
             list.ConvertAll<string>(client => client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value);
+
+        foreach (string playerName in networkPlayerList) {
+            // Remove Disconnected Player
+            if (!playerList.Contains(playerName)) {
+                networkPlayerList.Remove(playerName);
+            }
+        }
 
         Debug.Log("UpdatePlayerList");
         foreach (string playerName in playerList) {
@@ -214,7 +222,8 @@ public class LobbyManager : NetworkBehaviour {
         livingCrewMates.Value = 0;
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
             PlayerLife playerLife = client.PlayerObject.GetComponent<PlayerLife>();
-            if (playerLife.isAliveNetVar.Value && !playerLife.isImposterNetVar.Value) { // if Alive & not Imposter
+            if (playerLife.isAliveNetVar.Value && !playerLife.isImposterNetVar.Value) {
+                // if Alive & not Imposter
                 livingCrewMates.Value++;
             }
         }
