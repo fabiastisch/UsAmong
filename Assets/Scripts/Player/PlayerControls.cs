@@ -46,7 +46,6 @@ namespace Player {
                     if (!killCoolDownActive) {
                         // Kill Imposter Only
                         PerformKill();
-                        ActivateCoolDown();
                     }
                 }
             }
@@ -126,6 +125,7 @@ namespace Player {
             if (!GetComponent<PlayerLife>().isImposterNetVar.Value) {
                 return;
             }
+            ActivateCoolDown();
 
             Collider2D[] colliders = CheckSorroundingArea();
 
@@ -175,7 +175,7 @@ namespace Player {
                     if (!otherPlayer.Equals(gameObject)) {
                         PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
                         if (otherPlayerLife) {
-                            Debug.Log("[CHECKFORKILL]" + otherPlayerLife.isAliveNetVar.Value);
+                            // Debug.Log("[CHECKFORKILL]" + otherPlayerLife.isAliveNetVar.Value);
                             if (!otherPlayerLife.isAliveNetVar.Value) {
                                 break;
                             }
