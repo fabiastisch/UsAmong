@@ -13,7 +13,7 @@ namespace Player {
         public float killRadius = 3;
         private PlayerLife _playerLife;
         public bool killCoolDownActive = false;
-        public float coolDownTime = 0f;
+        public float coolDownTimePercentage = 0f;
 
 
         // Start is called before the first frame update
@@ -66,22 +66,22 @@ namespace Player {
 
         private void ActivateCoolDown() {
             killCoolDownActive = true;
-            coolDownTime = 1;
+            coolDownTimePercentage = 1;
             StartCoroutine(nameof(MinimizeCoolDownTime));
             Invoke(nameof(ReactivateKill), 20);
         }
 
         public IEnumerator MinimizeCoolDownTime() {
-            while (coolDownTime >= 0) {
-                coolDownTime -= 0.05f;
-                CanvasLogic.Instance.SetCoolDownTimeValue(coolDownTime);
+            while (coolDownTimePercentage >= 0) {
+                coolDownTimePercentage -= 0.05f;
+                CanvasLogic.Instance.SetCoolDownTimeValue(coolDownTimePercentage);
                 yield return new WaitForSeconds(1);
             }
         }
 
         public void ReactivateKill() {
             killCoolDownActive = false;
-            coolDownTime = 0;
+            coolDownTimePercentage = 0;
         }
 
         public void PerformReport() {

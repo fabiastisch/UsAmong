@@ -282,7 +282,7 @@ public class LobbyManager : NetworkBehaviour {
         playerLife.isAliveNetVar.Value = true;
 
         PlayerControls playerControls = playerObj.GetComponent<PlayerControls>();
-        playerControls.coolDownTime = 0f;
+        playerControls.coolDownTimePercentage = 0f;
         playerControls.killCoolDownActive = false;
 
         CoinManager.Instance.DestroyAllLocalCoins();

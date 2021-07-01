@@ -341,7 +341,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -3853049554695560880, guid: 62efb2f15285f5748825904f1c9e4e95,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -523,6 +523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   killRadius: 3
+  killCoolDownActive: 0
+  coolDownTimePercentage: 0
 --- !u!114 &2102627434789169036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,7 +649,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &6831556547713030760
 MonoBehaviour:
