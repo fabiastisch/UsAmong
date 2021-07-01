@@ -139,6 +139,7 @@ namespace Lobby {
             SetFullScreenOverlay(false);
             SetStartButtonActive(true);
             killBtnObj.SetActive(true);
+            openSettingsButton.SetActive(true);
         }
         
         public void StopShowingResult() {
@@ -220,6 +221,8 @@ namespace Lobby {
             }
 
             chat.SetActive(false);
+            settingsPanel.SetActive(false);
+            openSettingsButton.SetActive(false);
             openChatButton.SetActive(!active);
             Coinbar.SetActive(!active);
             reportBtnObj.SetActive(!active);
