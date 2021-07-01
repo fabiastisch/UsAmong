@@ -57,6 +57,9 @@ namespace Lobby {
         public GameObject chat;
         public GameObject openChatButton;
 
+        public GameObject openSettingsButton;
+        public GameObject settingsPanel;
+
         private float countDownTimeLeft = 0f;
         private bool isCountDownActive = false;
 
@@ -250,6 +253,10 @@ namespace Lobby {
         public void ChangeChatOpenStatus() {
             Debug.Log("[ChangeChatOpenStatus]");
             chat.SetActive(!chat.activeSelf);
+        }
+
+        public void OpenSettings() {
+            settingsPanel.SetActive(true);
         }
     }
 }

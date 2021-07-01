@@ -10,5 +10,6 @@ Images & Icons:
 * [Chat](https://pngtree.com/freepng/social-icon_4421694.html) | modified.
 * [Megaphone](https://www.pngrepo.com/svg/128338/megaphone) | modified.
 * [Skull](https://www.pngegg.com/de/png-nzauk) | modified.
+* [Settings](https://de.pngtree.com/freepng/setting-up-the-app_4491056.html) | modified.
 
 Characters created by [AnimaComedenti](https://github.com/AnimaComedenti)
