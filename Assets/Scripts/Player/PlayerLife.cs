@@ -61,6 +61,7 @@ namespace Player {
         [ClientRpc]
         private void KillClientRPC(ClientRpcParams clientRpcParams = default) {
             transform.position = LocalLobbyManager.Instance.deathBox.transform.position;
+            CanvasLogic.Instance.openChatButton.SetActive(true);
         }
 
         /**
