@@ -249,6 +249,10 @@ public class LobbyManager : NetworkBehaviour {
         GameObject localPlayer = this.getLocalPlayer();
 
         Vector3 random = new Vector3(Random.Range(-65f, -55f), Random.Range(-75f, -85f), 0);
+        while (Physics2D.OverlapCircleAll(random, 3f).Length > 0)
+        { 
+            random = new Vector3(Random.Range(-65f, -55f), Random.Range(-75f, -85f), 0);
+        }
         localPlayer.transform.position = random;
     }
 
