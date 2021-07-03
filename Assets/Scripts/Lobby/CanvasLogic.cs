@@ -259,7 +259,7 @@ namespace Lobby {
         }
 
         public void OpenSettings() {
-            settingsPanel.SetActive(true);
+            settingsPanel.SetActive(!settingsPanel.activeSelf);
         }
     }
 }

@@ -4,13 +4,11 @@ using MLAPI.Messaging;
 using MLAPI.Spawning;
 using Player;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace Teleport
-{
+namespace Teleport {
     [RequireComponent(typeof(NetworkObject))]
-    public class TeleportManager : NetworkBehaviour
-    {
-        
+    public class TeleportManager : NetworkBehaviour {
         #region SingletonPattern
 
         private static TeleportManager instance;
@@ -33,7 +31,7 @@ namespace Teleport
         }
 
         #endregion
-        
+
 
         [ServerRpc(RequireOwnership = false)]
         public void TeleportationServerRpc(Vector3 position) {
@@ -41,10 +39,23 @@ namespace Teleport
         }
 
         [ClientRpc]
-        public void TeleportationClientRpc(Vector3 position)
-        {
+        public void TeleportationClientRpc(Vector3 position) {
             GameObject localPlayer = getLocalPlayer();
-            localPlayer.transform.position = position;
+            if (!localPlayer.GetComponent<PlayerLife>().isAliveNetVar.Value) {
+                return;
+            }
+
+            Vector3 random = getRandomPositionWithBounds(position);
+            while (Physics2D.OverlapCircleAll(random, 3f).Length > 0)
+            { 
+                random = getRandomPositionWithBounds(position);
+            }
+            localPlayer.transform.position = random;
+        }
+
+        private Vector3 getRandomPositionWithBounds(Vector3 position) {
+            return new Vector3(Random.Range(-5f + position.x, 5f + position.x),
+                Random.Range(-5f + position.y, 5f + position.y), 0);
         }
 
         public GameObject getLocalPlayer() {

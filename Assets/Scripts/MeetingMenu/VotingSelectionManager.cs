@@ -5,10 +5,12 @@ using Lobby;
 using MeetingMenu;
 using MLAPI;
 using MLAPI.Connection;
+using MLAPI.Logging;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
 using Player;
+using Teleport;
 using UnityEngine;
 using Utils;
 
@@ -108,10 +110,50 @@ public class VotingSelectionManager : NetworkBehaviour {
         }
 
         selectionList.Clear();
+        
+        DetermineVictory();
 
-        ShowResultClientRpc(resultMessage);
+        if (LobbyManager.Singleton.inGameNetworkVar.Value) {
+            Invoke(nameof(TeleportPlayerAfterVoting), 4);
+            ShowResultClientRpc(resultMessage);
+        }
+    }
+    
+    /**
+         * Determines victory by existing Crewmates or Imposter
+         * 
+         * On Server
+         */
+    public bool DetermineVictory() {
+        LobbyManager lobbyManager = LobbyManager.Singleton;
+        
+        if (lobbyManager.livingCrewMates.Value <= lobbyManager.impostersCount) {
+            SetWinScreenClientRPC(true);
+            LobbyManager.Singleton.ResetGameOnServer();
+            return true;
+        }
+        else if (lobbyManager.impostersCount == 0) {
+            SetWinScreenClientRPC(false);
+            LobbyManager.Singleton.ResetGameOnServer();
+            return true;
+        }
+
+        return false;
     }
 
+    [ClientRpc]
+    private void SetWinScreenClientRPC(bool isImposterWinScreen) {
+        if (isImposterWinScreen) {
+            CanvasLogic.Instance.StartWinScreen(true);
+        }
+        else {
+            CanvasLogic.Instance.StartWinScreen(false);
+        }
+    }
+
+    private void TeleportPlayerAfterVoting() {
+        TeleportManager.Instance.TeleportationClientRpc(new Vector3(-60,-80));
+    }
 
     [ClientRpc]
     public void ShowResultClientRpc(string resultMessage) {
@@ -120,8 +162,9 @@ public class VotingSelectionManager : NetworkBehaviour {
 
     public void ExecutePlayer(string electedToDie) {
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
-            if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value == electedToDie[0].ToString()) {
+            if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value.Equals(electedToDie)) {
                 client.PlayerObject.GetComponent<PlayerLife>().Kill();
+                NetworkLog.LogWarningServer("[Execute]:Equals");
             }
         }
     }

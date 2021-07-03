@@ -2,6 +2,7 @@
 using System.Collections;
 using Lobby;
 using MLAPI;
+using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using Teleport;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Player {
             if (!IsLocalPlayer) {
                 return;
             }
-            
+
             if (CanvasLogic.Instance.chat.activeSelf) {
                 // If Chat is active
                 return;
@@ -87,20 +88,18 @@ namespace Player {
             Collider2D[] colliders = CheckSorroundingArea();
 
             foreach (Collider2D playerCollider in colliders) {
-                GameObject otherPlayer = playerCollider.transform.parent.gameObject;
+                GameObject deadBody = playerCollider.transform.parent.gameObject;
 
-                if (!CheckForPlayer(otherPlayer)) {
+                if (!CheckForPlayer(deadBody)) {
                     continue;
                 }
 
-                if (!otherPlayer.Equals(gameObject)) {
-                    PlayerLife otherPlayerLife = otherPlayer.GetComponent<PlayerLife>();
+                if (!deadBody.Equals(gameObject)) {
+                    PlayerLife otherPlayerLife = deadBody.GetComponent<PlayerLife>();
                     if (otherPlayerLife) {
                         if (!otherPlayerLife.isAliveNetVar.Value && otherPlayerLife.isReportable) {
                             // otherPlayerLife.isReported = true;
-                            Debug.Log("[ON REPORT] report player: " +
-                                      otherPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
-                            otherPlayer.GetComponent<PlayerLife>().Kill();
+                            deadBody.GetComponent<PlayerLife>().DestroyDeadBodyServerRPC();
 
                             VotingSelectionManager.Instance.SetPlayerServerRPC();
                             Invoke(nameof(StartConsultation), 1);
@@ -117,7 +116,20 @@ namespace Player {
         }
 
         public void StartConsultation() {
+            StartConsultationServerRpc();
             TeleportManager.Instance.TeleportationServerRpc(Vector3.zero);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void StartConsultationServerRpc() {
+            StartConsultationClientRpc();
+        }
+
+        [ClientRpc]
+        private void StartConsultationClientRpc() {
+            if (!NetUtils.GetLocalObject().GetComponent<PlayerLife>().isAliveNetVar.Value) {
+                return;
+            }
             CanvasLogic.Instance.StartVoting();
         }
 
@@ -125,6 +137,7 @@ namespace Player {
             if (!GetComponent<PlayerLife>().isImposterNetVar.Value) {
                 return;
             }
+
             ActivateCoolDown();
 
             Collider2D[] colliders = CheckSorroundingArea();

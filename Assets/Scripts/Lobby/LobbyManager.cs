@@ -31,6 +31,8 @@ public class LobbyManager : NetworkBehaviour {
 
     public NetworkVariableInt livingCrewMates = new NetworkVariableInt(NetUtils.Everyone, 0);
 
+    public NetworkVariableBool inGameNetworkVar = new NetworkVariableBool(NetUtils.Everyone, false);
+
 
     /**
      * Current ImposterCount
@@ -78,13 +80,10 @@ public class LobbyManager : NetworkBehaviour {
             return;
         }
 
-        if (NetUtils.IsServer()) {
-            Debug.Log("Server Spawn");
+        if (NetUtils.IsHost()) {
             SpawnPlayer(NetworkManager.Singleton.LocalClientId);
         }
         else {
-            Debug.Log("Invoke RPC");
-
             SpawnMeServerRpc(NetworkManager.Singleton.LocalClientId);
         }
     }
@@ -158,6 +157,7 @@ public class LobbyManager : NetworkBehaviour {
         int coundowntime = 3;
         PreStartGameClientRpc(coundowntime);
         SetImposters();
+        inGameNetworkVar.Value = true;
         Invoke(nameof(StartGame), coundowntime);
     }
 
@@ -259,6 +259,7 @@ public class LobbyManager : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     public void ResetGameServerRpc() {
+        inGameNetworkVar.Value = false;
         ResetGameClientRpc();
     }
 
@@ -266,6 +267,7 @@ public class LobbyManager : NetworkBehaviour {
      *  On Server
      */
     public void ResetGameOnServer() {
+        inGameNetworkVar.Value = false;
         ResetGameClientRpc();
     }
 
@@ -289,9 +291,8 @@ public class LobbyManager : NetworkBehaviour {
         CoinManager.Instance.remainingCoinsNetVar.Value = 0;
 
         Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
-        TeleportManager.Instance.TeleportationServerRpc(random);
-
         CanvasLogic.Instance.inGame = false;
+        TeleportManager.Instance.TeleportationServerRpc(random);
     }
 
 
