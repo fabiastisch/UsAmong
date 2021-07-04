@@ -107,5 +107,6 @@ public class CoinManager : NetworkBehaviour {
         foreach (GameObject coin in allCoins) {
             Destroy(coin);
         }
+        allCoins.Clear();
     }
 }

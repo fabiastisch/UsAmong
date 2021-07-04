@@ -4,6 +4,7 @@ using System.Linq;
 using Lobby;
 using MLAPI;
 using MLAPI.Connection;
+using MLAPI.Logging;
 using MLAPI.Messaging;
 using MLAPI.NetworkVariable;
 using MLAPI.NetworkVariable.Collections;
@@ -246,7 +247,7 @@ public class LobbyManager : NetworkBehaviour {
         Debug.Log("[StartGameClientRpc]");
         CanvasLogic.Instance.StopCountdown();
         CanvasLogic.Instance.SetYoureImpOrCrewMate(2);
-        GameObject localPlayer = this.getLocalPlayer();
+        NetworkObject localPlayer = NetUtils.GetLocalObject();
 
         Vector3 random = new Vector3(Random.Range(-65f, -55f), Random.Range(-75f, -85f), 0);
         while (Physics2D.OverlapCircleAll(random, 3f).Length > 0)
@@ -274,9 +275,11 @@ public class LobbyManager : NetworkBehaviour {
 
     [ClientRpc]
     public void ResetGameClientRpc() {
-        GameObject playerObj = getLocalPlayer();
+        
+        NetworkObject playerObj = NetUtils.GetLocalObject();
 
         NetworkVariableString playerName = playerObj.GetComponent<PlayerStuff>().PlayerName;
+        NetworkLog.LogInfoServer("[ResetGameClientRPC]: PlayerName: " + playerName.Value);
         
         PlayerLife playerLife = playerObj.GetComponent<PlayerLife>();
         playerLife.DestroyDeadBodyServerRPC();
@@ -290,13 +293,9 @@ public class LobbyManager : NetworkBehaviour {
         CoinManager.Instance.DestroyAllLocalCoins();
         CoinManager.Instance.remainingCoinsNetVar.Value = 0;
 
-        Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+        //Vector3 random = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
         CanvasLogic.Instance.inGame = false;
-        TeleportManager.Instance.TeleportationServerRpc(random);
+        TeleportManager.Instance.TeleportationServerRpc(new Vector3(0,0,0));
     }
 
-
-    public GameObject getLocalPlayer() {
-        return NetworkSpawnManager.GetLocalPlayerObject().gameObject;
-    }
 }

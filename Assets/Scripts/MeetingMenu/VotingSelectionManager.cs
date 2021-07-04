@@ -111,12 +111,11 @@ public class VotingSelectionManager : NetworkBehaviour {
 
         selectionList.Clear();
         
-        DetermineVictory();
 
-        if (LobbyManager.Singleton.inGameNetworkVar.Value) {
-            Invoke(nameof(TeleportPlayerAfterVoting), 4);
+        //if (LobbyManager.Singleton.inGameNetworkVar.Value) {
+            Invoke(nameof(TeleportPlayerAfterVoting), 2);
             ShowResultClientRpc(resultMessage);
-        }
+        //}
     }
     
     /**
@@ -153,18 +152,20 @@ public class VotingSelectionManager : NetworkBehaviour {
 
     private void TeleportPlayerAfterVoting() {
         TeleportManager.Instance.TeleportationClientRpc(new Vector3(-60,-80));
+        DetermineVictory();
     }
 
     [ClientRpc]
     public void ShowResultClientRpc(string resultMessage) {
-        VotingSelection.Instance.ShowResultClient(resultMessage);
+        if (NetUtils.GetLocalObject().GetComponent<PlayerLife>().isAliveNetVar.Value) {
+            VotingSelection.Instance.ShowResultClient(resultMessage);
+        }
     }
 
     public void ExecutePlayer(string electedToDie) {
         foreach (var client in NetworkManager.Singleton.ConnectedClientsList) {
             if (client.PlayerObject.GetComponent<PlayerStuff>().PlayerName.Value.Equals(electedToDie)) {
                 client.PlayerObject.GetComponent<PlayerLife>().Kill();
-                NetworkLog.LogWarningServer("[Execute]:Equals");
             }
         }
     }

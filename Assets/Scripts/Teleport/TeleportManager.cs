@@ -1,5 +1,6 @@
 using System;
 using MLAPI;
+using MLAPI.Logging;
 using MLAPI.Messaging;
 using MLAPI.Spawning;
 using Player;
@@ -42,6 +43,7 @@ namespace Teleport {
         public void TeleportationClientRpc(Vector3 position) {
             GameObject localPlayer = getLocalPlayer();
             if (!localPlayer.GetComponent<PlayerLife>().isAliveNetVar.Value) {
+                NetworkLog.LogWarningServer("[TeleportationClientRpc]: Player is not Alive: " + localPlayer.GetComponent<PlayerStuff>().PlayerName.Value);
                 return;
             }
 

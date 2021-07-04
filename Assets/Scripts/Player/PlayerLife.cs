@@ -14,6 +14,9 @@ namespace Player {
         public NetworkVariableBool isAliveNetVar = new NetworkVariableBool(NetUtils.Everyone, true);
         public bool isReportable = false;
         public NetworkVariableBool isImposterNetVar = new NetworkVariableBool(NetUtils.Everyone, false);
+        /**
+         * Server Only
+         */
         private ArrayList deadBodys = new ArrayList();
 
         private void Start() {
@@ -40,11 +43,9 @@ namespace Player {
         [ServerRpc(RequireOwnership = false)]
         private void KillServerRPC(ulong killedPlayerId) {
             NetworkObject killedPlayer = NetworkManager.ConnectedClients[killedPlayerId].PlayerObject;
-            //netObj.GetComponent<PlayerStuff>().PlayerName.Value += "[DEAD]";
             GameObject deadBody = LobbyManager.Singleton.deadPlayerObject;
             GameObject instanceDeadBody = Instantiate(deadBody, transform.position, Quaternion.identity);
             // Tp Dead player to Death Box
-
             instanceDeadBody.GetComponent<NetworkObject>().Spawn();
             deadBodys.Add(instanceDeadBody);
 
@@ -108,6 +109,7 @@ namespace Player {
             foreach (GameObject deadBody in deadBodys) {
                 Destroy(deadBody);
             }
+            deadBodys.Clear();
         }
     }
 }
