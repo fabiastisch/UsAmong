@@ -1,16 +1,20 @@
-Projektname: MLAPI Networking
-Namen der Teammitglieder: Christopher Meyer, Fabian Weber
+Projektname:
+    MLAPI Networking
+Namen der Teammitglieder: 
+    Christopher Meyer
+    Fabian Weber
 
 Besonderheiten: 
-  Funktioniert unmodifiziert nur local, da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben.
-  Eine Instanz gibt ein vorgegebenen Port als Host frei, in dem sich dieser Dazu entscheidet das Spiel als Host zu starten.
-  Alle Anderen nehmen als Client teil.
-  Steuerung (w,a,s,d):
-  w: oben
-  a: links
-  s: unten
-  d: rechts
-  Bedienung entweder über die Buttons oder Key Q zum töten (Imposter only) und Key R zum reporten.
+    Funktioniert unmodifiziert nur local, da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben.
+    Eine Instanz gibt ein vorgegebenen Port als Host frei, in dem sich dieser Dazu entscheidet das Spiel als Host zu starten.
+    Alle Anderen nehmen als Client teil.
+    Steuerung (w,a,s,d):
+        w: oben
+        a: links
+        s: unten
+        d: rechts
+    Zum Starten muss irgendeiner den Start Button drücken.
+    Bedienung entweder über die Buttons oder Key Q zum töten (Imposter only) und Key R zum reporten.
  
 Herausforderungen & Erfahrungen:
 
@@ -53,16 +57,19 @@ Herausforderungen & Erfahrungen:
     Leider hatte dies nicht gereicht, da der Spieler bereits irgendwie Verbunden war, aber dann wieder getrennt wurde, und es gab keine Möglichkeit, welche wir finden wurde um den Verbindunsaufbau richtig abzuwarten.
     Als Workaround rufen wir beim Disconnect vom Spieler wieder das 'MainMenu' auf.  
 
+Inspiration:
+    Among Us
+    
 Assets:
-* MLAPI [Docs](https://docs-multiplayer.unity3d.com/docs/getting-started/about-mlapi) | [Github](https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi)
+    MLAPI [Docs](https://docs-multiplayer.unity3d.com/docs/getting-started/about-mlapi) | [Github](https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi)
 
 Images & Icons:
-* [Dungeon sheet tiles](https://opengameart.org/content/a-blocky-dungeon)
-* [Teleporter](http://www.pngall.com/portal-png/download/33537) | modified.
-* [Chat](https://pngtree.com/freepng/social-icon_4421694.html) | modified.
-* [Megaphone](https://www.pngrepo.com/svg/128338/megaphone) | modified.
-* [Skull](https://www.pngegg.com/de/png-nzauk) | modified.
-* [Settings](https://de.pngtree.com/freepng/setting-up-the-app_4491056.html) | modified.
+    [Dungeon sheet tiles](https://opengameart.org/content/a-blocky-dungeon)
+    [Teleporter](http://www.pngall.com/portal-png/download/33537) | modified.
+    [Chat](https://pngtree.com/freepng/social-icon_4421694.html) | modified.
+    [Megaphone](https://www.pngrepo.com/svg/128338/megaphone) | modified.
+    [Skull](https://www.pngegg.com/de/png-nzauk) | modified.
+    [Settings](https://de.pngtree.com/freepng/setting-up-the-app_4491056.html) | modified.
 
 Characters created by [AnimaComedenti](https://github.com/AnimaComedenti)
 
