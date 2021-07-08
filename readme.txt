@@ -5,8 +5,8 @@ Namen der Teammitglieder:
     Fabian Weber
 
 Besonderheiten: 
-    Funktioniert unmodifiziert nur local, da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben,
-    diese findet man im Code auskommentiert.
+    Funktioniert unmodifiziert nur local (localhost), da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben,
+    diese findet man im Code auskommentiert. Hier konnten wir leider auch nicht weiteres Testen, da wir im Studentenwohnheim keine Möglichkeit haben den Port des anderen zu erreichen (durch z.B. Portforwardung, static IP,...)
     Eine Instanz gibt ein vorgegebenen Port als Host frei, in dem sich dieser Dazu entscheidet das Spiel als Host zu starten.
     Alle Anderen nehmen als Client teil.
     Steuerung (w,a,s,d):
