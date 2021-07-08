@@ -1,11 +1,12 @@
 Projektname:
-    MLAPI Networking
+    MLAPI Networking (Spielname: UsAmong)
 Namen der Teammitglieder: 
     Christopher Meyer
     Fabian Weber
 
 Besonderheiten: 
-    Funktioniert unmodifiziert nur local, da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben.
+    Funktioniert unmodifiziert nur local, da wir, um ein Saubereres UI zu haben, auf die Connection Adresse verzichtet haben,
+    diese findet man im Code auskommentiert.
     Eine Instanz gibt ein vorgegebenen Port als Host frei, in dem sich dieser Dazu entscheidet das Spiel als Host zu starten.
     Alle Anderen nehmen als Client teil.
     Steuerung (w,a,s,d):
@@ -42,7 +43,7 @@ Herausforderungen & Erfahrungen:
     Gegen ende des Projektes fanden wir endlich auch etwas versteckt in der Dokumenation wie wir eigene Typen als NetworkVariabln erstellen können.
     Dies war an und für sich relativ einfach, aber hätte uns früher viele Fehlermeldungen erspart bzgl. dass der Type (z.B. GameObject) nicht als NetworkVariable erlaubt ist.
   
-  Darstellung ob man nach Rechts oder Links schaut:
+  Darstellung ob man nach Rechts oder nach Links schaut:
     Um dieses Thema zu bearbeiten wäre es einfach gewesen einfach die Skalierung zu flippen. Aber die localScale wird nicht mit der NetworkTransform Component syncronisiert, wie wir später festgestellt haben.
     So haben wir dies mit Animations und dem Animator sowie dem NetworkAnimator realisiert.  
   
